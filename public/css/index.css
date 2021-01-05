@@ -1,0 +1,65 @@
+@font-face {
+  font-family: averta;
+  src: url("../fonts/Averta/Averta.otf") format("opentype");
+}
+@font-face {
+  font-family: averta-bold;
+  src: url("../fonts/Averta/Averta_Bold.otf") format("opentype");
+}
+@font-face {
+  font-family: averta-semibold;
+  src: url("../fonts/Averta/Averta Semibold [TheFontsMaster.com].otf")
+    format("opentype");
+}
+@font-face {
+  font-family: averta-light;
+  src: url("../fonts/Averta/Averta Light [TheFontsMaster.com].otf")
+    format("opentype");
+}
+body {
+  margin: 0;
+  font-family: averta, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+a {
+  color: #0074de;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: #68b5fb;
+}
+
+.f-reset {
+  font-size: 1rem;
+}
+.f0 {
+  font-size: 1.802032470703125em;
+}
+.f1 {
+  font-size: 1.601806640625em;
+}
+.f2 {
+  font-size: 1.423828125em;
+}
+.f3 {
+  font-size: 1.265625em;
+}
+.f4 {
+  font-size: 1.125em;
+}
+.f5 {
+  font-size: 0.8888888888888888em;
+}
+.f6 {
+  font-size: 0.7901234567901234em;
+}
