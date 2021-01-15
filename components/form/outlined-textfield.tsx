@@ -11,6 +11,7 @@ const useStyles = makeStyles({
     color: grey[600],
     backgroundColor: grey[100],
     border: "none",
+    borderRadius: 10,
   },
   inputFieldIcon: {
     color: grey[300],

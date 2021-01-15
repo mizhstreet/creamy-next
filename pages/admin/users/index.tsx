@@ -138,7 +138,7 @@ const UsersPage: React.FC = () => {
       <Grid container>
         <Box width={1} pl={5} pr={5}>
           <Box width={1} display="flex" justifyContent="space-between" alignItems="center">
-            <SectionTitle component="h2">Users</SectionTitle>
+            <SectionTitle component="h2">ユーザー</SectionTitle>
             <Button
               disableElevation
               variant="contained"

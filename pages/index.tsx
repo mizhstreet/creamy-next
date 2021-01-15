@@ -1,7 +1,8 @@
 import { Box, Button, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
-import { grey, red } from "@material-ui/core/colors";
+import { grey, pink, red } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
 import React from "react";
+import AddShoppingCartTwoToneIcon from "@material-ui/icons/AddShoppingCartTwoTone";
 import { OutlinedTextfield } from "../components/form/outlined-textfield";
 import { CategoryList } from "../components/home/category-list";
 import { FlavorList } from "../components/home/flavor-list";
@@ -10,6 +11,7 @@ import { Order } from "../components/home/order";
 import { Page } from "../components/page";
 import { SectionTitle } from "../components/typography/section-title";
 import { SubSectionTitle } from "../components/typography/sub-section-title";
+import { SizeList } from "../components/home/size-list";
 
 interface IValues {
   amount: number;
@@ -40,6 +42,9 @@ const useStyles = makeStyles({
       backgroundColor: red[300],
     },
   },
+  icon: {
+    fontSize: 22,
+  },
   applyBtn: {
     paddingTop: 10,
     paddingBottom: 10,
@@ -60,6 +65,20 @@ const useStyles = makeStyles({
     fontWeight: "bold",
     color: grey[500],
   },
+  cartBtn: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 40,
+    paddingRight: 40,
+    borderRadius: 10,
+    color: pink[800],
+    fontWeight: "bold",
+    fontSize: 20,
+    backgroundColor: pink[100],
+    "&:hover": {
+      backgroundColor: pink[100],
+    },
+  },
 });
 
 const Home: React.FC = () => {
@@ -73,12 +92,27 @@ const Home: React.FC = () => {
       <Grid container>
         <Grid style={{ backgroundColor: grey[100] }} item md={8}>
           <Box width={1} pl={5} pr={5}>
-            <SectionTitle component={"h2"}>サイズ</SectionTitle>
+            <Box justifyContent="space-between" display="flex" alignItems="center">
+              <SectionTitle component={"h2"}>個数</SectionTitle>
+            </Box>
             <CategoryList />
+            <SectionTitle component={"h2"}>サイズ</SectionTitle>
+            <SizeList />
             <SectionTitle component={"h2"}>容器</SectionTitle>
             <OptionList />
             <SectionTitle component={"h2"}>フレーバ</SectionTitle>
             <FlavorList />
+
+            <Box mt={8} mb={8} textAlign="center">
+              <Button
+                disableElevation
+                variant="contained"
+                className={classes.cartBtn}
+                startIcon={<AddShoppingCartTwoToneIcon className={classes.icon} />}
+              >
+                追加
+              </Button>
+            </Box>
           </Box>
         </Grid>
         <Grid item md={4}>

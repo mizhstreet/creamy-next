@@ -51,20 +51,21 @@ const ReceiptItem: React.FC = () => {
     <Grid className={classes.container} container>
       <Grid item md={6}>
         <Box display="flex" width={1}>
-          <Box bgcolor={pink[100]} display="block" maxWidth={100} p={1.5} borderRadius={10}>
-            <img className={classes.img} src="images/flavors/1.png" alt="" />
+          <Box bgcolor={pink[100]} display="block" maxWidth={80} p={1.5} borderRadius={10}>
+            <img className={classes.img} src="/images/flavors/1.png" alt="" />
           </Box>
           <Box pl={1.5}>
-            <Typography className={classes.name}>シングル</Typography>
+            <Typography className={classes.name}>シングル　キッズ</Typography>
             <Typography className={classes.flavor}>大納言あずき</Typography>
-            <Typography className={classes.price}>100円</Typography>
+            <Typography className={classes.price}>ワッフルコーン+40円</Typography>
+            <Typography className={classes.price}>280円</Typography>
           </Box>
         </Box>
       </Grid>
       <Grid item md={6}>
         <Box display="flex" height={1} justifyContent="space-between" alignItems="center">
           <Typography className={classes.quantity}>2</Typography>
-          <Typography className={classes.itemTotal}>1000円</Typography>
+          <Typography className={classes.itemTotal}>640円</Typography>
         </Box>
       </Grid>
     </Grid>

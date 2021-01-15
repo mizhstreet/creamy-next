@@ -46,8 +46,9 @@ interface IFormValues {
 }
 
 const DisplayingErrorMessagesSchema = Yup.object().shape({
-  email: Yup.string().min(4, "短すぎる!").max(50, "長すぎる!").required("必ず入力してください"),
+  username: Yup.string().min(4, "短すぎる!").max(50, "長すぎる!").required("必ず入力してください"),
   password: Yup.string().min(4, "短すぎる!").max(50, "長すぎる!").required("必ず入力してください"),
+  name: Yup.string().max(50, "長すぎる!").required("必ず入力してください"),
 });
 
 const EditUserPage: React.FC = () => {
@@ -79,8 +80,15 @@ const EditUserPage: React.FC = () => {
             >
               {() => (
                 <Form>
+                  <Box></Box>
                   <Box width={1}>
                     <Box width={1}>
+                      <Box width={1}>
+                        <InputLabel className={classes.inputLabel} htmlFor="email">
+                          名前
+                        </InputLabel>
+                        <Field component={OutlinedTextfield} name="name" />
+                      </Box>
                       <InputLabel className={classes.inputLabel} htmlFor="email">
                         ログインID
                       </InputLabel>
@@ -91,12 +99,6 @@ const EditUserPage: React.FC = () => {
                         パスワード
                       </InputLabel>
                       <Field type="password" component={OutlinedTextfield} name="password" />
-                    </Box>
-                    <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        名前
-                      </InputLabel>
-                      <Field component={OutlinedTextfield} name="name" />
                     </Box>
                     <Box display="flex" alignItems="center">
                       <Field component={Switch} type="checkbox" name="isAdmin" />
