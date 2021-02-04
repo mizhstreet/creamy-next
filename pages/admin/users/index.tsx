@@ -18,6 +18,7 @@ import Pagination from "@material-ui/lab/Pagination";
 
 import { blue, grey, red } from "@material-ui/core/colors";
 import React from "react";
+import Link from "next/link";
 import PersonAddTwoToneIcon from "@material-ui/icons/PersonAddTwoTone";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
@@ -139,14 +140,16 @@ const UsersPage: React.FC = () => {
         <Box width={1} pl={5} pr={5}>
           <Box width={1} display="flex" justifyContent="space-between" alignItems="center">
             <SectionTitle component="h2">ユーザー</SectionTitle>
-            <Button
-              disableElevation
-              variant="contained"
-              className={classes.newBtn}
-              startIcon={<PersonAddTwoToneIcon className={classes.icon} />}
-            >
-              登録
-            </Button>
+            <Link href="users/create-user" passHref>
+              <Button
+                disableElevation
+                variant="contained"
+                className={classes.newBtn}
+                startIcon={<PersonAddTwoToneIcon className={classes.icon} />}
+              >
+                登録
+              </Button>
+            </Link>
           </Box>
           <Grid style={{ height: 1000 }} item md={12}>
             <TableContainer className={classes.tableContainer}>

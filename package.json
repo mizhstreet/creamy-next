@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "export": "next export"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
@@ -15,13 +16,16 @@
     "chart.js": "^2.9.4",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",
+    "lodash.findindex": "^4.6.0",
     "next": "10.0.4",
     "react": "17.0.1",
     "react-chartjs-2": "^2.11.1",
     "react-dom": "17.0.1",
+    "unstated-next": "^1.1.0",
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@types/lodash.findindex": "^4.6.6",
     "@types/node": "^14.14.16",
     "@types/yup": "^0.29.11",
     "@typescript-eslint/eslint-plugin": "^4.11.1",

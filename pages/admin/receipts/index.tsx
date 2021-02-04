@@ -93,11 +93,11 @@ const UsersPage: React.FC = () => {
 
   return (
     <Page title={"売上管理"}>
-      <SectionTitle component="h2">グラーフ</SectionTitle>
+      {/* <SectionTitle component="h2">グラーフ</SectionTitle> */}
       <Grid container justify="center">
-        <Grid item md={8}>
+        {/* <Grid item md={8}>
           <LineChart />
-        </Grid>
+        </Grid> */}
         <Box width={1} pl={5} pr={5}>
           <Box width={1} display="flex" justifyContent="space-between" alignItems="center">
             <SectionTitle component="h2">レシート管理</SectionTitle>

@@ -3,8 +3,12 @@ import {
   Button,
   Chip,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   DialogTitle,
   Grid,
+  InputLabel,
   makeStyles,
   Slide,
   Table,
@@ -18,15 +22,18 @@ import {
 } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 
-import { blue, grey, pink, red } from "@material-ui/core/colors";
+import { blue, green, grey, pink, red } from "@material-ui/core/colors";
 import React from "react";
 import AddCircleTwoToneIcon from "@material-ui/icons/AddCircleTwoTone";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import WarningTwoToneIcon from "@material-ui/icons/WarningTwoTone";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { SectionTitle } from "../../../components/typography/section-title";
 import { TransitionProps } from "@material-ui/core/transitions/transition";
 import { Page } from "../../../components/page";
+import { Field, Form, Formik } from "formik";
+import { OutlinedTextfield } from "../../../components/form/outlined-textfield";
 
 const useStyles = makeStyles({
   img: {
@@ -67,6 +74,25 @@ const useStyles = makeStyles({
       backgroundColor: blue[100],
     },
   },
+  orderBtn: {
+    marginLeft: 4,
+    marginRight: 4,
+    maxWidth: "40px",
+    maxHeight: "40px",
+    minWidth: "40px",
+    minHeight: "40px",
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 10,
+    color: green[400],
+    fontWeight: "bold",
+    fontSize: 16,
+    width: "100%",
+    backgroundColor: green[100],
+    "&:hover": {
+      backgroundColor: green[100],
+    },
+  },
   deleteBtn: {
     marginLeft: 4,
     marginRight: 4,
@@ -97,6 +123,10 @@ const useStyles = makeStyles({
     "&:hover": {
       backgroundColor: blue[100],
     },
+  },
+  orderPricing: {
+    fontWeight: "bold",
+    color: grey[600],
   },
   tableContainer: {},
   table: {
@@ -299,6 +329,9 @@ const UsersPage: React.FC = () => {
                       >
                         <DeleteTwoToneIcon className={classes.icon} />
                       </Button>
+                      <Button disableElevation className={classes.orderBtn} variant="contained">
+                        <AddShoppingCartIcon className={classes.icon} />
+                      </Button>
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -324,6 +357,9 @@ const UsersPage: React.FC = () => {
                         variant="contained"
                       >
                         <DeleteTwoToneIcon className={classes.icon} />
+                      </Button>
+                      <Button disableElevation className={classes.orderBtn} variant="contained">
+                        <AddShoppingCartIcon className={classes.icon} />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -420,6 +456,9 @@ const UsersPage: React.FC = () => {
                         variant="contained"
                       >
                         <DeleteTwoToneIcon className={classes.icon} />
+                      </Button>
+                      <Button disableElevation className={classes.orderBtn} variant="contained">
+                        <AddShoppingCartIcon className={classes.icon} />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -563,6 +602,50 @@ const UsersPage: React.FC = () => {
             削除
           </Button>
         </Dialog>
+        {/* <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">発注</DialogTitle>
+          <DialogContent>
+            <DialogContentText>値段: 230円</DialogContentText>
+            <Box display="flex" flexDirection="row" alignItems="center">
+              <Box width={1} display="flex" alignItems="center">
+                <Box maxWidth={60} bgcolor={pink[100]} borderRadius={10}>
+                  <img className={classes.img} src={"/images/4.png"} />
+                </Box>
+                <Typography className={classes.name}>コーン</Typography>
+              </Box>
+              <Box>
+                <Formik
+                  initialValues={{ quantity: 0 }}
+                  onSubmit={async (values, { setSubmitting }) => {
+                    console.log("something");
+                    setSubmitting(true);
+                  }}
+                >
+                  {() => (
+                    <Form>
+                      <Box width={1}>
+                        <Box width={1}>
+                          <Field component={OutlinedTextfield} name="quantity" />
+                        </Box>
+                      </Box>
+                    </Form>
+                  )}
+                </Formik>
+              </Box>
+              <Box width={1} textAlign="center">
+                <Typography className={classes.orderPricing}>6000円</Typography>
+              </Box>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              キャンセル
+            </Button>
+            <Button onClick={handleClose} color="primary">
+              発注
+            </Button>
+          </DialogActions>
+        </Dialog> */}
       </Grid>
     </Page>
   );
