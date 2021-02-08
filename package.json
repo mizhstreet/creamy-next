@@ -16,6 +16,7 @@
     "chart.js": "^2.9.4",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",
+    "lodash.filter": "^4.6.0",
     "lodash.findindex": "^4.6.0",
     "next": "10.0.4",
     "react": "17.0.1",
@@ -25,6 +26,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@types/lodash.filter": "^4.6.6",
     "@types/lodash.findindex": "^4.6.6",
     "@types/node": "^14.14.16",
     "@types/yup": "^0.29.11",

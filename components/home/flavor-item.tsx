@@ -1,6 +1,7 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
 import { grey, pink } from "@material-ui/core/colors";
 import findIndex from "lodash.findindex";
+import filter from "lodash.filter";
 import React from "react";
 import { Selected } from "../../containers/selected-container";
 import { IFlavor } from "../../interfaces/flavor";
@@ -20,6 +21,16 @@ const useStyles = makeStyles({
   item: {},
 });
 
+const Quantity: React.FC<{ quantity: number }> = ({ quantity }) => {
+  return (
+    <Box>
+      <Box position="absolute" right={10} top={5} color={"white"} fontSize={30}>
+        +{quantity}
+      </Box>
+    </Box>
+  );
+};
+
 const FlavorItem: React.FC<IFlavor> = ({ flavorname, flavorid, image = "/images/flavors/2.png" }) => {
   const classes = useStyles();
   const container = Selected.useContainer();
@@ -36,7 +47,12 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorname, flavorid, image = "/images/
         borderRadius={10}
         bgcolor={grey[300]}
       >
-        {findIndex(container.selected.flavors, { flavorid }) != -1 && <Overlay />}
+        {container.countFlavors(flavorid) != -1 && (
+          <Box>
+            <Overlay />
+            <Quantity quantity={container.countFlavors(flavorid)} />
+          </Box>
+        )}
         <Box width={1} borderRadius={10}>
           <img className={classes.img} src={image} />
         </Box>

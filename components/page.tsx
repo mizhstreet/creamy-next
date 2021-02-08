@@ -118,18 +118,20 @@ export const Page: React.FC<Props> = (props) => {
       </Box>
       <List>
         <ListItem className={classes.navListItem} button>
-          <Box
-            width={1}
-            display="flex"
-            pt={2}
-            pb={2}
-            flexDirection="column"
-            alignItems="center"
-            className={router.pathname == "/" ? `${classes.active}` : ""}
-          >
-            <CreditCardTwoToneIcon className={classes.icon} />
-            <Typography className={classes.navItemText}>レジ</Typography>
-          </Box>
+          <Link href="/">
+            <Box
+              width={1}
+              display="flex"
+              pt={2}
+              pb={2}
+              flexDirection="column"
+              alignItems="center"
+              className={router.pathname == "/" ? `${classes.active}` : ""}
+            >
+              <CreditCardTwoToneIcon className={classes.icon} />
+              <Typography className={classes.navItemText}>レジ</Typography>
+            </Box>
+          </Link>
         </ListItem>
         <ListItem className={classes.navListItem} button>
           <Link href="/admin/users">

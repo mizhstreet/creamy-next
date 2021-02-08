@@ -1,13 +1,16 @@
 import { Box, Button, Grid, InputLabel, makeStyles, Typography } from "@material-ui/core";
 import { blue, grey, pink } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { CheckboxWithLabel } from "formik-material-ui";
 import { OutlinedTextfield } from "../components/form/outlined-textfield";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 interface IValues {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -55,15 +58,17 @@ const useStyles = makeStyles({
 });
 
 const DisplayingErrorMessagesSchema = Yup.object().shape({
-  email: Yup.string().min(4, "短すぎる!").max(50, "長すぎる!").required("必ず入力してください"),
+  username: Yup.string().min(4, "短すぎる!").max(50, "長すぎる!").required("必ず入力してください"),
   password: Yup.string().min(4, "短すぎる!").max(50, "長すぎる!").required("必ず入力してください"),
 });
 
 const Login: React.FC = () => {
+  const [errMsg, setErrMsg] = useState<string>("");
   const classes = useStyles();
+  const router = useRouter();
 
   const initialValues: IValues = {
-    email: "",
+    username: "",
     password: "",
   };
   return (
@@ -76,25 +81,41 @@ const Login: React.FC = () => {
           <Typography className={classes.greeting}>
             <span className={classes.coloredGreeting}>こん</span>に<span className={classes.coloredGreeting}>ちは</span>
           </Typography>
+          {errMsg !== "" ? (
+            <Box mb={5}>
+              <Alert severity="error">
+                <AlertTitle>
+                  <strong>エラー</strong>
+                </AlertTitle>
+                ログインIDかパスワードか間違っている
+              </Alert>
+            </Box>
+          ) : null}
           <Formik
             validationSchema={DisplayingErrorMessagesSchema}
             initialValues={initialValues}
-            onSubmit={async (values, { setSubmitting }) => {
-              console.log("something");
+            onSubmit={async ({ username, password }, { setSubmitting }) => {
               setSubmitting(true);
+              axios.post("http://localhost/phpmvc/web/api/auth/login", { username, password }).then((response) => {
+                if (response.data) {
+                  router.push("/");
+                } else {
+                  setErrMsg("saodnaskd");
+                }
+              });
             }}
           >
             {() => (
               <Form>
                 <Box width={1}>
                   <Box width={1}>
-                    <InputLabel className={classes.inputLabel} htmlFor="email">
+                    <InputLabel className={classes.inputLabel} htmlFor="username">
                       Username
                     </InputLabel>
-                    <Field placeholder="IDを入力してください" component={OutlinedTextfield} name="email" />
+                    <Field placeholder="IDを入力してください" component={OutlinedTextfield} name="username" />
                   </Box>
                   <Box width={1}>
-                    <InputLabel className={classes.inputLabel} htmlFor="email">
+                    <InputLabel className={classes.inputLabel} htmlFor="username">
                       パスワード
                     </InputLabel>
                     <Field
@@ -113,7 +134,7 @@ const Login: React.FC = () => {
                     />
                   </Box>
                   <Box width={1}>
-                    <Button variant="contained" classes={{ contained: classes.applyBtn }}>
+                    <Button type="submit" variant="contained" classes={{ contained: classes.applyBtn }}>
                       ログイン
                     </Button>
                   </Box>

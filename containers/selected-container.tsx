@@ -33,9 +33,7 @@ interface IOption {
 
 function useSelected() {
   const [selected, setSelected] = useState<IItem>({ flavors: [] });
-
-  console.log(selected);
-
+  console.log(selected.flavors);
   const addFlavor = (flavor: IFlavor) => {
     const { product, flavors } = selected;
     if (product) {
@@ -63,7 +61,28 @@ function useSelected() {
     setSelected((prev) => ({ ...prev, size }));
   };
 
-  return { selected, addFlavor, setOption, setProduct, setSize };
+  const reset = () => {
+    setSelected({ flavors: [] });
+  };
+
+  const isQualified = (): boolean => {
+    if (selected.flavors.length != selected.product?.totalflavor) {
+      return false;
+    }
+    return true;
+  };
+
+  const countFlavors = (flavorid: number): number => {
+    let count = 0;
+    for (let i = 0; i < selected.flavors.length; i++) {
+      if (selected.flavors[i].flavorid == flavorid) {
+        count++;
+      }
+    }
+    return count != 0 ? count : -1;
+  };
+
+  return { selected, addFlavor, setOption, setProduct, setSize, reset, isQualified, countFlavors };
 }
 
 const Selected = createContainer(useSelected);

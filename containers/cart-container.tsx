@@ -24,7 +24,7 @@ function useCart() {
       total +=
         (parseInt(i.option?.price as any) +
           parseInt(i.product?.base_price as any) +
-          parseInt(i.size?.additionalprice as any)) *
+          parseInt(i.size?.additionalprice ? (i.size.additionalprice as any) : "0")) *
         i.quantity;
     });
 

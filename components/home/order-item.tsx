@@ -48,8 +48,8 @@ const OrderItem: React.FC<IItem> = ({ product, option, flavors, size }) => {
           </Box>
           <Box pl={2}>
             <Typography className={classes.name}>
-              {product?.productname}　{size?.product_sizename}
-              {size?.additionalprice != 0 && `+${size?.additionalprice}`}円
+              {product?.productname}　{size && size?.product_sizename}
+              {size && size?.additionalprice != 0 && `+${size?.additionalprice}円`}
             </Typography>
             {flavors.map((f, i) => (
               <Typography key={i} className={classes.flavor}>

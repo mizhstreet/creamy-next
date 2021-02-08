@@ -34,12 +34,14 @@ const AddToCartBtn: React.FC = () => {
       <Button
         disableElevation
         variant="contained"
+        disabled={!selected.isQualified()}
         className={classes.cartBtn}
         startIcon={<AddShoppingCartTwoToneIcon className={classes.icon} />}
         onClick={() => {
           const arr = [...selected.selected.flavors];
           const item1 = { ...selected.selected, flavors: arr, quantity: 1 };
           cart.addToCart(item1);
+          selected.reset();
         }}
       >
         追加

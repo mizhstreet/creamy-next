@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,81 +7,121 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { OutlinedTextfield } from "../form/outlined-textfield";
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, makeStyles } from "@material-ui/core";
+import { grey, red } from "@material-ui/core/colors";
+import { useFormikContext } from "formik";
+import { IValues } from "./cart-component";
+
+const useStyles = makeStyles({
+  applyBtn: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 10,
+    color: red[400],
+    fontWeight: "bold",
+    fontSize: 16,
+    width: "100%",
+    maxWidth: 160,
+    minWidth: 80,
+    backgroundColor: red[100],
+    "&:hover": {
+      backgroundColor: red[100],
+    },
+  },
+  inputField: {
+    padding: 15,
+    fontWeight: "bold",
+    color: grey[600],
+    backgroundColor: grey[100],
+    border: "none",
+    borderRadius: 10,
+  },
+  inputFieldIcon: {
+    color: grey[300],
+  },
+  fieldLabel: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: grey[700],
+    paddingBottom: 10,
+  },
+  fieldContainer: {
+    marginBottom: 25,
+    width: "100%",
+  },
+  root: {
+    borderRadius: 10,
+    overflow: "hidden",
+    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      border: "none",
+      borderColor: "green",
+    },
+  },
+});
 
 export const VirtualKeyboard: React.FC = () => {
-  const [open, setOpen] = React.useState(false);
+  const classes = useStyles();
 
+  const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
 
+  const { values, setFieldValue, setFieldTouched } = useFormikContext<IValues>();
+
+  const [cash, setCash] = useState<string>("");
+
+  const calcDelete = () => {
+    setCash((prev) => {
+      return prev.slice(0, -1);
+    });
+  };
+
+  const btnArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open form dialog
+      <Button disableElevation onClick={handleClickOpen} variant="contained" classes={{ contained: classes.applyBtn }}>
+        入力
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogContent>
-          <TextField fullWidth name="email" />
+          <TextField
+            fullWidth={true}
+            variant="outlined"
+            className={classes.root}
+            inputProps={{ className: classes.inputField }}
+            value={cash}
+            name="cash"
+          />
           <Box mb={6}></Box>
           <Grid container>
+            {btnArr.map((num) => (
+              <Grid key={num} item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
+                <Button
+                  onClick={() => {
+                    setCash(cash + `${num}`);
+                  }}
+                  variant="contained"
+                  color="primary"
+                  disableElevation
+                >
+                  {num}
+                </Button>
+              </Grid>
+            ))}
             <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                1
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                2
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                3
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                4
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                5
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                6
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                7
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                8
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                9
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="primary" disableElevation>
-                0
-              </Button>
-            </Grid>
-            <Grid item md={4} container justify="center" style={{ marginTop: 10, marginBottom: 20 }}>
-              <Button variant="contained" color="secondary" disableElevation>
+              <Button
+                onClick={() => {
+                  calcDelete();
+                }}
+                variant="contained"
+                color="secondary"
+                disableElevation
+              >
                 X
               </Button>
             </Grid>
@@ -91,7 +131,14 @@ export const VirtualKeyboard: React.FC = () => {
           <Button onClick={handleClose} color="primary">
             キャンセル
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button
+            onClick={() => {
+              setFieldValue("cash", parseInt(cash));
+              setFieldTouched("cash");
+              handleClose();
+            }}
+            color="primary"
+          >
             確定
           </Button>
         </DialogActions>

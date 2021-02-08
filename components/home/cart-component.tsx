@@ -9,8 +9,10 @@ import { Order } from "./order";
 import { SubSectionTitle } from "../typography/sub-section-title";
 import { OutlinedTextfield } from "../form/outlined-textfield";
 import { Cart } from "../../containers/cart-container";
+import { VirtualKeyboard } from "./virtual-keyboard";
+import { useRouter } from "next/router";
 
-interface IValues {
+export interface IValues {
   cash: number;
 }
 
@@ -42,21 +44,7 @@ const useStyles = makeStyles({
   icon: {
     fontSize: 22,
   },
-  applyBtn: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderRadius: 10,
-    color: red[400],
-    fontWeight: "bold",
-    fontSize: 16,
-    width: "100%",
-    maxWidth: 160,
-    minWidth: 80,
-    backgroundColor: red[100],
-    "&:hover": {
-      backgroundColor: red[100],
-    },
-  },
+
   fee: {
     fontSize: 20,
     fontWeight: "bold",
@@ -84,6 +72,8 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
 
 const CartComponent: React.FC = () => {
   const classes = useStyles();
+
+  const router = useRouter();
 
   const container = Cart.useContainer();
 
@@ -114,11 +104,11 @@ const CartComponent: React.FC = () => {
                 axios
                   .post("http://localhost/phpmvc/web/api/receipt/create", { data: container.items, cash: values.cash })
                   .then((response) => {
-                    console.log(response.data);
+                    router.push(`/receipt?id=${response.data}`);
                   });
               }}
             >
-              {(props) => (
+              {({ values }) => (
                 <Box>
                   <Form>
                     <Box width={1} display="flex">
@@ -126,9 +116,7 @@ const CartComponent: React.FC = () => {
                         <Field component={OutlinedTextfield} name="cash" />
                       </Box>
                       <Box ml={1} width={"25%"}>
-                        <Button disableElevation variant="contained" classes={{ contained: classes.applyBtn }}>
-                          入力
-                        </Button>
+                        <VirtualKeyboard />
                       </Box>
                     </Box>
                     <Divider />
@@ -144,11 +132,11 @@ const CartComponent: React.FC = () => {
                         </Box>
                         <Box component="li" pt={1} display="flex" justifyContent="space-between">
                           <Typography className={classes.fee}>受取金額</Typography>
-                          <Typography className={classes.fee}>{props.values.cash}</Typography>
+                          <Typography className={classes.fee}>{values.cash}</Typography>
                         </Box>
                         <Box component="li" pt={1} display="flex" justifyContent="space-between">
                           <Typography className={classes.fee}>お釣り</Typography>
-                          <Typography className={classes.fee}>{props.values.cash - container.getTotal()}</Typography>
+                          <Typography className={classes.fee}>{values.cash - container.getTotal()}</Typography>
                         </Box>
                       </Box>
                     </Box>

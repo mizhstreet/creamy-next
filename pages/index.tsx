@@ -8,7 +8,6 @@ import { Order } from "../components/home/order";
 import { Page } from "../components/page";
 import { SectionTitle } from "../components/typography/section-title";
 import { SizeList } from "../components/home/size-list";
-import { VirtualKeyboard } from "../components/home/virtual-keyboard";
 import { Selected } from "../containers/selected-container";
 import { Cart } from "../containers/cart-container";
 import { CartComponent } from "../components/home/cart-component";
@@ -37,7 +36,6 @@ const Home: React.FC = () => {
             </Grid>
             <CartComponent />
           </Grid>
-          <VirtualKeyboard />
         </Page>
       </Selected.Provider>
     </Cart.Provider>

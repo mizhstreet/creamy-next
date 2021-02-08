@@ -10,15 +10,17 @@ const SizeList: React.FC = () => {
   const [sizes, setSizes] = useState<ISize[]>([]);
 
   const loadSizes = useCallback(() => {
-    axios
-      .get<ISize[]>("http://localhost/phpmvc/web/api/product-size", {
-        params: {
-          productid,
-        },
-      })
-      .then((response) => {
-        setSizes(response.data);
-      });
+    if (productid) {
+      axios
+        .get<ISize[]>("http://localhost/phpmvc/web/api/product-size", {
+          params: {
+            productid,
+          },
+        })
+        .then((response) => {
+          setSizes(response.data);
+        });
+    }
   }, [productid]);
 
   useEffect(() => {
