@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Dialog,
-  DialogTitle,
   Grid,
   makeStyles,
   Slide,
@@ -14,17 +12,17 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-import Pagination from "@material-ui/lab/Pagination";
 
 import { blue, grey, red } from "@material-ui/core/colors";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import PersonAddTwoToneIcon from "@material-ui/icons/PersonAddTwoTone";
-import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
-import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import { SectionTitle } from "../../../components/typography/section-title";
 import { TransitionProps } from "@material-ui/core/transitions/transition";
 import { Page } from "../../../components/page";
+import axios from "axios";
+import { IUser } from "../../../interfaces/user";
+import { User } from "../../../components/admin/user/user";
 
 const useStyles = makeStyles({
   img: {
@@ -125,22 +123,26 @@ const Transition = React.forwardRef(function Transition(
 
 const UsersPage: React.FC = () => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [users, setUsers] = useState<IUser[]>([]);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const loadUsers = useCallback(() => {
+    axios.get<IUser[]>("http://localhost/phpmvc/web/api/user/all").then((response) => {
+      setUsers(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+
   return (
     <Page title={"レジ"}>
       <Grid container>
         <Box width={1} pl={5} pr={5}>
           <Box width={1} display="flex" justifyContent="space-between" alignItems="center">
             <SectionTitle component="h2">ユーザー</SectionTitle>
-            <Link href="users/create-user" passHref>
+            <Link href="users/create-user">
               <Button
                 disableElevation
                 variant="contained"
@@ -158,101 +160,19 @@ const UsersPage: React.FC = () => {
                   <TableRow>
                     <TableCell className={classes.tableHeadline}>Id</TableCell>
                     <TableCell className={classes.tableHeadline}>名前</TableCell>
-                    <TableCell className={classes.tableHeadline}>入社日</TableCell>
                     <TableCell className={classes.tableHeadline}>役割</TableCell>
                     <TableCell className={classes.tableHeadline}>Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/matthew-mather.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>大平　岳将</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2011/18/20</TableCell>
-                    <TableCell className={classes.tableCell}>管理者</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        <EditTwoToneIcon className={classes.icon} />
-                      </Button>
-                      <Button
-                        disableElevation
-                        className={classes.deleteBtn}
-                        onClick={handleClickOpen}
-                        variant="contained"
-                      >
-                        <DeleteTwoToneIcon className={classes.icon} />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#82362</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/zayn.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>BUI TUAN MINH</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2013/2/20</TableCell>
-                    <TableCell className={classes.tableCell}>スタッフ</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        <EditTwoToneIcon className={classes.icon} />
-                      </Button>
-                      <Button disableElevation className={classes.deleteBtn} variant="contained">
-                        <DeleteTwoToneIcon className={classes.icon} />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#82362</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/andrea.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>野間　亜希子</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2012/12/1</TableCell>
-                    <TableCell className={classes.tableCell}>管理者</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        <EditTwoToneIcon className={classes.icon} />
-                      </Button>
-                      <Button disableElevation className={classes.deleteBtn} variant="contained">
-                        <DeleteTwoToneIcon className={classes.icon} />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                  {users.map((u) => (
+                    <User key={u.userid} name={u.name} isAdmin={u.isAdmin} userid={u.userid} image={u.image} />
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
-            <Box width={1} display="flex" justifyContent="center" mt={4}>
-              <Pagination count={3} color="primary" />
-            </Box>
           </Grid>
         </Box>
-        <Dialog
-          open={open}
-          TransitionComponent={Transition}
-          keepMounted
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle id="alert-dialog-slide-title">本当に削除しますか？</DialogTitle>
-          <Button onClick={handleClose} color="secondary">
-            削除
-          </Button>
-        </Dialog>
       </Grid>
     </Page>
   );

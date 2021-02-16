@@ -1,5 +1,5 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { blue, green, pink } from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
 import React, { useMemo } from "react";
 import { Selected } from "../../containers/selected-container";
 import { IProduct } from "../../interfaces/product";

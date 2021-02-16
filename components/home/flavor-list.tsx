@@ -22,12 +22,7 @@ const FlavorList: React.FC = () => {
     <Box paddingTop={1}>
       <Grid container>
         {flavors.map((f) => (
-          <FlavorItem
-            key={f.flavorid}
-            flavorid={f.flavorid}
-            flavorname={f.flavorname}
-            image={"/images/flavors/2.png"}
-          />
+          <FlavorItem key={f.flavorid} {...f} />
         ))}
       </Grid>
     </Box>

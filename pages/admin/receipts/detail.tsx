@@ -58,9 +58,9 @@ const ReceiptPage: React.FC = () => {
               </Box>
             </Box>
             <Box component={"ul"} p={0} pt={2}>
+              {/* <ReceiptItem />
               <ReceiptItem />
-              <ReceiptItem />
-              <ReceiptItem />
+              <ReceiptItem /> */}
             </Box>
             <Divider />
             <Grid justify="flex-end" container>

@@ -4,9 +4,6 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { OutlinedTextfield } from "../form/outlined-textfield";
 import { Box, Grid, makeStyles } from "@material-ui/core";
 import { grey, red } from "@material-ui/core/colors";
 import { useFormikContext } from "formik";
@@ -70,7 +67,7 @@ export const VirtualKeyboard: React.FC = () => {
     setOpen(false);
   };
 
-  const { values, setFieldValue, setFieldTouched } = useFormikContext<IValues>();
+  const { setFieldValue, setFieldTouched } = useFormikContext<IValues>();
 
   const [cash, setCash] = useState<string>("");
 

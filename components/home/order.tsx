@@ -1,5 +1,4 @@
-import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { grey, pink, purple } from "@material-ui/core/colors";
+import { Grid } from "@material-ui/core";
 import React from "react";
 import { Cart } from "../../containers/cart-container";
 import { OrderItem } from "./order-item";

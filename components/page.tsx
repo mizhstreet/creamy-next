@@ -166,18 +166,20 @@ export const Page: React.FC<Props> = (props) => {
           </Link>
         </ListItem>
         <ListItem className={classes.navListItem} button>
-          <Box
-            width={1}
-            display="flex"
-            pt={2}
-            pb={2}
-            flexDirection="column"
-            alignItems="center"
-            className={router.pathname.includes("receipts") ? `${classes.active}` : ""}
-          >
-            <ListAltTwoToneIcon className={classes.icon} />
-            <Typography className={classes.navItemText}>売上</Typography>
-          </Box>
+          <Link href="/admin/receipts">
+            <Box
+              width={1}
+              display="flex"
+              pt={2}
+              pb={2}
+              flexDirection="column"
+              alignItems="center"
+              className={router.pathname.includes("receipts") ? `${classes.active}` : ""}
+            >
+              <ListAltTwoToneIcon className={classes.icon} />
+              <Typography className={classes.navItemText}>売上</Typography>
+            </Box>
+          </Link>
         </ListItem>
         <Box height={"100%"}></Box>
         <Divider />

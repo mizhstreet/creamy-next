@@ -21,7 +21,7 @@ const OptionList: React.FC = () => {
     <Box ml={-4} mr={-4} paddingTop={1}>
       <Grid container>
         {options.map((o) => (
-          <OptionItem key={o.optionid} optionid={o.optionid} optionname={o.optionname} price={o.price} />
+          <OptionItem key={o.optionid} {...o} />
         ))}
       </Grid>
     </Box>
