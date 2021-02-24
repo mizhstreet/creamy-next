@@ -8,6 +8,7 @@ import { OutlinedTextfield } from "../components/form/outlined-textfield";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { getEndpoint } from "../utils/getEndpoint";
 
 interface IValues {
   username: string;
@@ -96,13 +97,21 @@ const Login: React.FC = () => {
             initialValues={initialValues}
             onSubmit={async ({ username, password }, { setSubmitting }) => {
               setSubmitting(true);
-              axios.post("http://localhost/phpmvc/web/api/auth/login", { username, password }).then((response) => {
-                if (response.data) {
-                  router.push("/");
-                } else {
-                  setErrMsg("saodnaskd");
-                }
-              });
+              axios
+                .post(
+                  getEndpoint("/api/auth/login"),
+                  { username, password },
+                  {
+                    withCredentials: true,
+                  },
+                )
+                .then((response) => {
+                  if (response.data) {
+                    router.push("/");
+                  } else {
+                    setErrMsg("saodnaskd");
+                  }
+                });
             }}
           >
             {() => (
@@ -123,14 +132,6 @@ const Login: React.FC = () => {
                       placeholder="パスワードを入力してください"
                       component={OutlinedTextfield}
                       name="password"
-                    />
-                  </Box>
-                  <Box width={1}>
-                    <Field
-                      component={CheckboxWithLabel}
-                      type="checkbox"
-                      name="checked"
-                      Label={{ label: "マスタモード" }}
                     />
                   </Box>
                   <Box width={1}>

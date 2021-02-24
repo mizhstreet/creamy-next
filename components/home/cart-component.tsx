@@ -11,6 +11,7 @@ import { OutlinedTextfield } from "../form/outlined-textfield";
 import { Cart } from "../../containers/cart-container";
 import { VirtualKeyboard } from "./virtual-keyboard";
 import { useRouter } from "next/router";
+import { getEndpoint } from "../../utils/getEndpoint";
 
 export interface IValues {
   cash: number;
@@ -102,7 +103,13 @@ const CartComponent: React.FC = () => {
               onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true);
                 axios
-                  .post("http://localhost/phpmvc/web/api/receipt/create", { data: container.items, cash: values.cash })
+                  .post(
+                    getEndpoint("/api/receipt/create"),
+                    { data: container.items, cash: values.cash },
+                    {
+                      withCredentials: true,
+                    },
+                  )
                   .then((response) => {
                     router.push(`/receipt?id=${response.data}`);
                   });
@@ -127,16 +134,16 @@ const CartComponent: React.FC = () => {
                             合計
                           </Typography>
                           <Typography style={{ color: grey[600], fontSize: 30 }} className={classes.fee}>
-                            {container.getTotal()}
+                            {container.getTotal()}円
                           </Typography>
                         </Box>
                         <Box component="li" pt={1} display="flex" justifyContent="space-between">
                           <Typography className={classes.fee}>受取金額</Typography>
-                          <Typography className={classes.fee}>{values.cash}</Typography>
+                          <Typography className={classes.fee}>{values.cash}円</Typography>
                         </Box>
                         <Box component="li" pt={1} display="flex" justifyContent="space-between">
                           <Typography className={classes.fee}>お釣り</Typography>
-                          <Typography className={classes.fee}>{values.cash - container.getTotal()}</Typography>
+                          <Typography className={classes.fee}>{values.cash - container.getTotal()}円</Typography>
                         </Box>
                       </Box>
                     </Box>

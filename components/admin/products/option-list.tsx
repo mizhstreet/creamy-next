@@ -4,6 +4,7 @@ import { grey } from "@material-ui/core/colors";
 import { IOption } from "../../../interfaces/option";
 import axios from "axios";
 import { OptionItem } from "./option-item";
+import { getEndpoint } from "../../../utils/getEndpoint";
 
 const useStyles = makeStyles({
   tableContainer: {},
@@ -31,7 +32,7 @@ const OptionList: React.FC = () => {
   const [options, setOptions] = useState<IOption[]>([]);
 
   const loadOptions = useCallback(() => {
-    axios.get<IOption[]>("http://localhost/phpmvc/web/api/option/all").then((response) => {
+    axios.get<IOption[]>(getEndpoint("/api/option/all")).then((response) => {
       setOptions(response.data);
     });
   }, []);

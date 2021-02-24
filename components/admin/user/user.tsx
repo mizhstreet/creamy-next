@@ -4,6 +4,7 @@ import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import { blue, grey, red } from "@material-ui/core/colors";
 import axios from "axios";
+import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
   img: {
@@ -118,7 +119,7 @@ const User: React.FC<IProps> = ({ userid, name, isAdmin, image }) => {
   };
 
   const handleDelete = async () => {
-    await axios.post("http://localhost/phpmvc/web/api/user/delete", { userid }).then((response) => {
+    await axios.post("/web/api/user/delete", { userid }).then((response) => {
       if (response.data == "ok") {
         setIsDeleted(true);
       }
@@ -132,12 +133,12 @@ const User: React.FC<IProps> = ({ userid, name, isAdmin, image }) => {
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           <Box maxWidth={60}>
-            <img className={classes.img} src={"/images/matthew-mather.jpg"} />
+            <img className={classes.img} src={getImage(image)} />
           </Box>
           <Typography className={classes.name}>{name}</Typography>
         </Box>
       </TableCell>
-      <TableCell className={classes.tableCell}>{isAdmin ? "管理者" : "スタッフ"}</TableCell>
+      <TableCell className={classes.tableCell}>{(isAdmin as any) == "1" ? "管理者" : "スタッフ"}</TableCell>
       <TableCell className={classes.tableCell}>
         <Button disableElevation className={classes.editBtn} variant="contained">
           <EditTwoToneIcon className={classes.icon} />

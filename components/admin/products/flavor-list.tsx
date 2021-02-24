@@ -4,6 +4,7 @@ import { grey } from "@material-ui/core/colors";
 import { IFlavor } from "../../../interfaces/flavor";
 import axios from "axios";
 import { FlavorItem } from "./flavor-item";
+import { getEndpoint } from "../../../utils/getEndpoint";
 
 const useStyles = makeStyles({
   tableContainer: {},
@@ -31,7 +32,7 @@ const FlavorList: React.FC = () => {
   const [flavors, setFlavors] = useState<IFlavor[]>([]);
 
   const loadFlavors = useCallback(() => {
-    axios.get<IFlavor[]>("http://localhost/phpmvc/web/api/flavor/all").then((response) => {
+    axios.get<IFlavor[]>(getEndpoint("/api/flavor/all")).then((response) => {
       setFlavors(response.data);
     });
   }, []);

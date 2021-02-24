@@ -1,29 +1,25 @@
-import { Box, Grid } from "@material-ui/core";
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { IFlavor } from "../../interfaces/flavor";
+import { Box, CircularProgress, Grid } from "@material-ui/core";
+import React from "react";
+import { useFlavorsQuery } from "../../generated/apolloComponent";
+import { getImage } from "../../utils/getImage";
 import { FlavorItem } from "./flavor-item";
-import { Overlay } from "./overlay";
 
 const FlavorList: React.FC = () => {
-  const [flavors, setFlavors] = useState<IFlavor[]>([]);
+  const { data, loading, error } = useFlavorsQuery();
 
-  const loadFlavors = useCallback(() => {
-    axios.get<IFlavor[]>("http://localhost/phpmvc/web/api/flavor/all").then((response) => {
-      setFlavors(response.data);
-    });
-  }, []);
+  if (loading) {
+    return <CircularProgress />;
+  }
 
-  useEffect(() => {
-    loadFlavors();
-  }, [loadFlavors]);
-
+  if (error) {
+    console.warn(error);
+  }
   return (
     <Box paddingTop={1}>
       <Grid container>
-        {flavors.map((f) => (
-          <FlavorItem key={f.flavorid} {...f} />
-        ))}
+        {data &&
+          data.flavors &&
+          data.flavors.map((f) => <FlavorItem key={f.id} id={f.id} name={f.name} image={getImage(f.image)} />)}
       </Grid>
     </Box>
   );

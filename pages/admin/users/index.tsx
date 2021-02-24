@@ -23,6 +23,7 @@ import { Page } from "../../../components/page";
 import axios from "axios";
 import { IUser } from "../../../interfaces/user";
 import { User } from "../../../components/admin/user/user";
+import { getEndpoint } from "../../../utils/getEndpoint";
 
 const useStyles = makeStyles({
   img: {
@@ -127,7 +128,7 @@ const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<IUser[]>([]);
 
   const loadUsers = useCallback(() => {
-    axios.get<IUser[]>("http://localhost/phpmvc/web/api/user/all").then((response) => {
+    axios.get<IUser[]>(getEndpoint("/api/user/all")).then((response) => {
       setUsers(response.data);
     });
   }, []);
@@ -142,16 +143,15 @@ const UsersPage: React.FC = () => {
         <Box width={1} pl={5} pr={5}>
           <Box width={1} display="flex" justifyContent="space-between" alignItems="center">
             <SectionTitle component="h2">ユーザー</SectionTitle>
-            <Link href="users/create-user">
-              <Button
-                disableElevation
-                variant="contained"
-                className={classes.newBtn}
-                startIcon={<PersonAddTwoToneIcon className={classes.icon} />}
-              >
-                登録
-              </Button>
-            </Link>
+            <Button
+              href="/web/admin/user/create"
+              disableElevation
+              variant="contained"
+              className={classes.newBtn}
+              startIcon={<PersonAddTwoToneIcon className={classes.icon} />}
+            >
+              登録
+            </Button>
           </Box>
           <Grid style={{ height: 1000 }} item md={12}>
             <TableContainer className={classes.tableContainer}>

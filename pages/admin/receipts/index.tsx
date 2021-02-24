@@ -9,16 +9,18 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { blue, grey } from "@material-ui/core/colors";
-import React from "react";
-import PersonAddTwoToneIcon from "@material-ui/icons/PersonAddTwoTone";
+import React, { useState, useEffect, useCallback } from "react";
 import { SectionTitle } from "../../../components/typography/section-title";
 import { Page } from "../../../components/page";
-import { LineChart } from "../../../components/chart/line-chart";
+import { IReceipt } from "../../../interfaces/receipt";
+import axios from "axios";
+import { IUser } from "../../../interfaces/user";
+import { ReceiptItem } from "../../../components/admin/receipts/receipt-item";
+import { getEndpoint } from "../../../utils/getEndpoint";
 
 const useStyles = makeStyles({
   img: {
@@ -88,8 +90,39 @@ const useStyles = makeStyles({
   tableHead: {},
 });
 
-const UsersPage: React.FC = () => {
+const ReceiptsPage: React.FC = () => {
   const classes = useStyles();
+
+  const [receipts, setReceipts] = useState<(IUser & IReceipt)[]>([]);
+
+  const [count, setCount] = useState<number>(0);
+
+  const [page, setPage] = useState<number>(1);
+
+  const loadReceipts = useCallback(() => {
+    axios.get<(IUser & IReceipt)[]>(getEndpoint(`/api/receipt/all?page=${page}`)).then((response) => {
+      setReceipts(response.data);
+    });
+  }, [page]);
+
+  const loadCount = useCallback(() => {
+    axios.get<{ count: number }>(getEndpoint(`/api/receipt/count`)).then((response) => {
+      setCount(response.data.count);
+    });
+  }, []);
+
+  function handlePageChange(_: any, page: number) {
+    console.log(page);
+    setPage(page);
+  }
+
+  useEffect(() => {
+    loadCount();
+  }, [loadCount]);
+
+  useEffect(() => {
+    loadReceipts();
+  }, [page]);
 
   return (
     <Page title={"売上管理"}>
@@ -123,164 +156,14 @@ const UsersPage: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/matthew-mather.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>大平　岳将</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2021年1月6日</TableCell>
-                    <TableCell className={classes.tableCell}>4600円</TableCell>
-
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        詳細を見る
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/zayn.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>BUI TUAN MINH</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2021年1月6日</TableCell>
-                    <TableCell className={classes.tableCell}>4600円</TableCell>
-
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        詳細を見る
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/zayn.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>BUI TUAN MINH</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2021年1月6日</TableCell>
-                    <TableCell className={classes.tableCell}>4600円</TableCell>
-
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        詳細を見る
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/matthew-mather.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>大平　岳将</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2021年1月6日</TableCell>
-                    <TableCell className={classes.tableCell}>4600円</TableCell>
-
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        詳細を見る
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/matthew-mather.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>大平　岳将</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2021年1月6日</TableCell>
-                    <TableCell className={classes.tableCell}>4600円</TableCell>
-
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        詳細を見る
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/zayn.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>BUI TUAN MINH</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2021年1月6日</TableCell>
-                    <TableCell className={classes.tableCell}>4600円</TableCell>
-
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        詳細を見る
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/zayn.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>BUI TUAN MINH</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2021年1月6日</TableCell>
-                    <TableCell className={classes.tableCell}>4600円</TableCell>
-
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        詳細を見る
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>#12312</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Box width={1} display="flex" alignItems="center">
-                        <Box maxWidth={60}>
-                          <img className={classes.img} src={"/images/matthew-mather.jpg"} />
-                        </Box>
-                        <Typography className={classes.name}>大平　岳将</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>2021年1月6日</TableCell>
-                    <TableCell className={classes.tableCell}>4600円</TableCell>
-
-                    <TableCell className={classes.tableCell}>
-                      <Button disableElevation className={classes.editBtn} variant="contained">
-                        詳細を見る
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                  {receipts.map((r) => (
+                    <ReceiptItem key={r.receiptid} {...r} />
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
             <Box width={1} display="flex" justifyContent="center" mt={4}>
-              <Pagination count={3} color="primary" />
+              <Pagination page={page} onChange={handlePageChange} count={Math.floor(count / 10)} color="primary" />
             </Box>
           </Grid>
         </Box>
@@ -289,4 +172,4 @@ const UsersPage: React.FC = () => {
   );
 };
 
-export default UsersPage;
+export default ReceiptsPage;

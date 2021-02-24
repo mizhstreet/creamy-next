@@ -21,11 +21,10 @@ function useCart() {
   const getTotal = (): number => {
     let total = 0;
     items.forEach((i) => {
-      total +=
-        (parseInt(i.option?.price as any) +
-          parseInt(i.product?.base_price as any) +
-          parseInt(i.size?.additionalprice ? (i.size.additionalprice as any) : "0")) *
-        i.quantity;
+      if (i.product && i.size && i.option) {
+        total +=
+          (i.option?.price + i.product?.basePrice + parseInt(i.size?.price ? (i.size.price as any) : "0")) * i.quantity;
+      }
     });
 
     return total;

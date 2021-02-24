@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Page } from "../components/page";
 import { ReceiptItem } from "../components/receipt/receipt-item";
 import { IReceipt } from "../interfaces/receipt";
+import { getEndpoint } from "../utils/getEndpoint";
 
 const useStyles = makeStyles({
   receiptNum: {
@@ -39,12 +40,11 @@ const ReceiptPage: NextPage = () => {
   const classes = useStyles();
 
   const router = useRouter();
-  console.log(router.query);
 
   const [receipt, setReceipts] = useState<IReceipt>();
 
   const loadReceipts = useCallback(() => {
-    axios.get<IReceipt>(`http://localhost/phpmvc/web/api/receipt?id=${router.query.id}`).then((response) => {
+    axios.get<IReceipt>(getEndpoint(`/api/receipt?id=${router.query.id}`)).then((response) => {
       setReceipts(response.data);
     });
   }, []);
@@ -52,6 +52,10 @@ const ReceiptPage: NextPage = () => {
   useEffect(() => {
     loadReceipts();
   }, [loadReceipts]);
+
+  if (!receipt) {
+    return <div></div>;
+  }
 
   return (
     <Page title="レシート">
@@ -87,7 +91,9 @@ const ReceiptPage: NextPage = () => {
                       </Box>
                       <Box component="li" pt={1} display="flex" justifyContent="space-between">
                         <Typography className={classes.fee}>お釣り</Typography>
-                        <Typography className={classes.fee}>1000円</Typography>
+                        <Typography className={classes.fee}>
+                          {parseInt(receipt.cash as any) - parseInt(receipt.total as any)}円
+                        </Typography>
                       </Box>
                     </Box>
                   </Box>

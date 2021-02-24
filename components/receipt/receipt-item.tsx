@@ -1,7 +1,8 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { grey, pink, purple } from "@material-ui/core/colors";
+import { blue, grey, pink, purple } from "@material-ui/core/colors";
 import React from "react";
 import { IReceiptItem } from "../../interfaces/receipt-items";
+import { getImage } from "../../utils/getImage";
 
 const useStyles = makeStyles({
   container: {
@@ -55,6 +56,7 @@ const ReceiptItem: React.FC<IReceiptItem> = ({
   price,
   quantity,
   flavors,
+  image,
 }) => {
   function renderFlavors(flavors: string) {
     const flavorsArr = flavors.slice(0, -1).split(",");
@@ -71,14 +73,14 @@ const ReceiptItem: React.FC<IReceiptItem> = ({
         <Box display="flex" width={1}>
           <Box
             textAlign="center"
-            bgcolor={pink[100]}
+            bgcolor={blue[100]}
             display="flex"
             alignItems="center"
             maxWidth={90}
             p={1}
             borderRadius={10}
           >
-            <img className={classes.img} src="/images/flavors/1.png" alt="" />
+            <img className={classes.img} src={getImage(image)} alt="" />
           </Box>
           <Box pl={1.5}>
             <Typography className={classes.name}>

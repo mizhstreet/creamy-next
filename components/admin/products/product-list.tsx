@@ -5,6 +5,7 @@ import { IProduct } from "../../../interfaces/product";
 import axios from "axios";
 import { ProductItem } from "./product-item";
 import { ISize } from "../../../interfaces/size";
+import { getEndpoint } from "../../../utils/getEndpoint";
 
 const useStyles = makeStyles({
   tableContainer: {},
@@ -32,7 +33,7 @@ const ProductList: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [sizes, setSizes] = useState<ISize[]>([]);
   const loadProducts = useCallback(() => {
-    axios.get<IProduct[]>("http://localhost/phpmvc/web/api/product/all").then((response) => {
+    axios.get<IProduct[]>(getEndpoint("/api/product/all")).then((response) => {
       setProducts(response.data);
     });
   }, []);
@@ -42,7 +43,7 @@ const ProductList: React.FC = () => {
   }, [loadProducts]);
 
   const loadSizes = useCallback(() => {
-    axios.get<ISize[]>("http://localhost/phpmvc/web/api/size/all").then((response) => {
+    axios.get<ISize[]>(getEndpoint("/api/size/all")).then((response) => {
       setSizes(response.data);
     });
   }, []);

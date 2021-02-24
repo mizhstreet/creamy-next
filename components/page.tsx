@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -16,6 +16,8 @@ import Link from "next/link";
 import { Box, Divider } from "@material-ui/core";
 import { blue, red } from "@material-ui/core/colors";
 import Head from "next/head";
+import { getEndpoint } from "../utils/getEndpoint";
+import { getImage } from "../utils/getImage";
 
 // import logo from "../../../public/images/logo.png";
 
@@ -105,11 +107,16 @@ export const Page: React.FC<Props> = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  function logout() {
+    router.replace("/login");
+  }
 
   const drawer = (
     <div>
@@ -181,18 +188,19 @@ export const Page: React.FC<Props> = (props) => {
             </Box>
           </Link>
         </ListItem>
+
         <Box height={"100%"}></Box>
         <Divider />
         <ListItem className={classes.navListItem} button>
           <Box width={1} display="flex" pt={2} flexDirection="column" alignItems="center">
             <Box maxWidth={60} borderRadius={50} overflow={"hidden"}>
-              <img className={classes.avatar} src="/images/zayn.jpg" alt="" />
+              <img className={classes.avatar} src={""} alt="" />
             </Box>
-            <Typography className={classes.navItemText}>mizhB</Typography>
+            <Typography className={classes.navItemText}>MInh Biu</Typography>
           </Box>
         </ListItem>
         <ListItem className={classes.navListItem} button>
-          <Box width={1} display="flex" pt={2} pb={2} flexDirection="column" alignItems="center">
+          <Box width={1} display="flex" pt={2} pb={2} flexDirection="column" alignItems="center" onClick={logout}>
             <ExitToAppTwoToneIcon style={{ color: red[800] }} className={classes.icon} />
             <Typography style={{ color: red[800] }} className={classes.navItemText}>
               ログアウト

@@ -1,11 +1,9 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
 import { grey, pink } from "@material-ui/core/colors";
-import findIndex from "lodash.findindex";
-import filter from "lodash.filter";
 import React from "react";
-import { Selected } from "../../containers/selected-container";
-import { IFlavor } from "../../interfaces/flavor";
+import { Selected, TFlavor } from "../../containers/selected-container";
 import { Overlay } from "./overlay";
+import { Flavor } from "../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   img: {
@@ -31,14 +29,14 @@ const Quantity: React.FC<{ quantity: number }> = ({ quantity }) => {
   );
 };
 
-const FlavorItem: React.FC<IFlavor> = ({ flavorname, flavorid, image = "/images/flavors/2.png" }) => {
+const FlavorItem: React.FC<TFlavor> = ({ name, id, image }) => {
   const classes = useStyles();
   const container = Selected.useContainer();
   return (
     <Grid item md={2}>
       <Box
         onClick={() => {
-          container.addFlavor({ flavorid, flavorname });
+          container.addFlavor({ id, name, image });
         }}
         padding={1}
         position={"relative"}
@@ -46,18 +44,19 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorname, flavorid, image = "/images/
         width={"75%"}
         borderRadius={10}
         bgcolor={grey[300]}
+        mb={2}
       >
-        {container.countFlavors(flavorid) != -1 && (
+        {container.countFlavors(id) != -1 && (
           <Box>
             <Overlay />
-            <Quantity quantity={container.countFlavors(flavorid)} />
+            <Quantity quantity={container.countFlavors(id)} />
           </Box>
         )}
         <Box width={1} borderRadius={10}>
           <img className={classes.img} src={image} />
         </Box>
         <Typography className={classes.name} align="center">
-          {flavorname}
+          {name}
         </Typography>
       </Box>
     </Grid>

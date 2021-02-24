@@ -23,6 +23,7 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { Field, Form, Formik } from "formik";
 import { OutlinedTextfield } from "../../form/outlined-textfield";
 import axios from "axios";
+import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
   img: {
@@ -153,7 +154,7 @@ const OptionItem: React.FC<IOption> = ({ optionid, optionname, stock, stock_pric
   };
 
   const handleDelete = async () => {
-    await axios.post("http://localhost/phpmvc/web/api/option/delete", { optionid }).then((response) => {
+    await axios.post("/web/api/option/delete", { optionid }).then((response) => {
       if (response.data == "ok") {
         setIsDeleted(true);
       }
@@ -162,7 +163,7 @@ const OptionItem: React.FC<IOption> = ({ optionid, optionname, stock, stock_pric
   };
 
   const handleStock = async (quantity: string) => {
-    await axios.post("http://localhost/phpmvc/web/api/option/add-to-stock", { optionid, quantity }).then((response) => {
+    await axios.post("/web/api/option/add-to-stock", { optionid, quantity }).then((response) => {
       if (response.data == "ok") {
         if (cachedQuantity == -1) {
           setCachedQuantity(parseInt(stock) + parseInt(quantity));
@@ -180,7 +181,7 @@ const OptionItem: React.FC<IOption> = ({ optionid, optionname, stock, stock_pric
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           <Box maxWidth={60}>
-            <img className={classes.img} src={"/images/cone.jpg"} />
+            <img className={classes.img} src={getImage("cone.jpg")} />
           </Box>
           <Typography className={classes.name}>{optionname}</Typography>
         </Box>

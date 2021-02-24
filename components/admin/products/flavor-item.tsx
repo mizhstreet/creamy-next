@@ -22,6 +22,7 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import axios from "axios";
 import { Field, Form, Formik } from "formik";
 import { OutlinedTextfield } from "../../form/outlined-textfield";
+import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
   img: {
@@ -124,7 +125,7 @@ const useStyles = makeStyles({
   tableHead: {},
 });
 
-const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_price }) => {
+const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_price, image }) => {
   const classes = useStyles();
 
   const [cachedQuantity, setCachedQuantity] = useState<number>(-1);
@@ -152,7 +153,7 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_pric
   };
 
   const handleDelete = async () => {
-    await axios.post("http://localhost/phpmvc/web/api/flavor/delete", { flavorid }).then((response) => {
+    await axios.post("/web/api/flavor/delete", { flavorid }).then((response) => {
       if (response.data == "ok") {
         setIsDeleted(true);
       }
@@ -161,7 +162,7 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_pric
   };
 
   const handleStock = async (quantity: string) => {
-    await axios.post("http://localhost/phpmvc/web/api/flavor/add-to-stock", { flavorid, quantity }).then((response) => {
+    await axios.post("/web/api/flavor/add-to-stock", { flavorid, quantity }).then((response) => {
       console.log(response.data);
       if (response.data == "ok") {
         if (cachedQuantity == -1) {
@@ -173,13 +174,13 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_pric
     });
     handleClose();
   };
-  return (
+  return !isDeleted ? (
     <TableRow>
       <TableCell className={classes.tableCell}>#{flavorid}</TableCell>
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           <Box maxWidth={60}>
-            <img className={classes.img} src={"/images/flavors/1.png"} />
+            <img className={classes.img} src={getImage(image)} />
           </Box>
           <Typography className={classes.name}>{flavorname}</Typography>
         </Box>
@@ -221,7 +222,7 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_pric
               <Box display="flex" flexDirection="row" alignItems="center">
                 <Box width={1} display="flex" alignItems="center">
                   <Box maxWidth={60} bgcolor={pink[100]} borderRadius={10}>
-                    <img className={classes.img} src={"/images/4.png"} />
+                    <img className={classes.img} src={getImage(image)} />
                   </Box>
                   <Typography className={classes.name}>{flavorname}</Typography>
                 </Box>
@@ -271,7 +272,7 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_pric
         </Button>
       </Dialog>
     </TableRow>
-  );
+  ) : null;
 };
 
 export { FlavorItem };

@@ -1,8 +1,7 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
 import { green, pink } from "@material-ui/core/colors";
 import React from "react";
-import { Selected } from "../../containers/selected-container";
-import { ISize } from "../../interfaces/size";
+import { Selected, TSize } from "../../containers/selected-container";
 import { Overlay } from "./overlay";
 
 const useStyles = makeStyles({
@@ -29,8 +28,7 @@ const useStyles = makeStyles({
     textAlign: "center",
   },
 });
-
-const SizeItem: React.FC<ISize> = ({ product_sizeid, product_sizename, additionalprice }) => {
+const SizeItem: React.FC<TSize> = ({ id, name, price }) => {
   const classes = useStyles();
 
   const container = Selected.useContainer();
@@ -42,18 +40,18 @@ const SizeItem: React.FC<ISize> = ({ product_sizeid, product_sizename, additiona
         bgcolor={pink[100]}
         onClick={() => {
           container.setSize({
-            product_sizename,
-            product_sizeid,
-            additionalprice,
+            id,
+            name,
+            price,
           });
         }}
       >
-        {container.selected.size?.product_sizeid == product_sizeid && <Overlay />}
+        {container.selected.size?.id == id && <Overlay />}
         <Typography style={{ color: pink[800] }} className={classes.sizeName}>
-          {product_sizename}
+          {name}
         </Typography>
         <Typography style={{ color: pink[800] }} className={classes.sizeName}>
-          {additionalprice}円
+          {price}円
         </Typography>
       </Box>
     </Grid>

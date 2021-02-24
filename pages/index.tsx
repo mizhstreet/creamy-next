@@ -25,7 +25,6 @@ const Home: React.FC = () => {
                   <SectionTitle component={"h2"}>個数</SectionTitle>
                 </Box>
                 <ProductList />
-                <SectionTitle component={"h2"}>サイズ</SectionTitle>
                 <SizeList />
                 <SectionTitle component={"h2"}>容器</SectionTitle>
                 <OptionList />

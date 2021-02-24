@@ -1,34 +1,38 @@
-import { Box, Grid } from "@material-ui/core";
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { IProduct } from "../../interfaces/product";
+import { Box, CircularProgress, Grid } from "@material-ui/core";
+import React from "react";
+import { useProductsQuery } from "../../generated/apolloComponent";
+import { getImage } from "../../utils/getImage";
 import { ProductItem } from "./product-item";
 
 const ProductList: React.FC = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const { loading, data, error } = useProductsQuery();
 
-  const loadProducts = useCallback(() => {
-    axios.get<IProduct[]>("http://localhost/phpmvc/web/api/product/all").then((response) => {
-      setProducts(response.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    loadProducts();
-  }, [loadProducts]);
+  if (loading) {
+    if (data?.products) {
+      const a = data?.products[0];
+      console.log(a);
+    }
+    return <CircularProgress />;
+  }
+  if (error) {
+    console.warn(error);
+  }
   return (
     <Box ml={-4} mr={-4} paddingTop={1}>
       <Grid container>
-        {products.map((p) => (
-          <ProductItem
-            key={p.productid}
-            image={"/images/some.png"}
-            productid={p.productid}
-            productname={p.productname}
-            base_price={p.base_price}
-            totalflavor={p.totalflavor}
-          />
-        ))}
+        {data &&
+          data.products &&
+          data.products.map((p) => (
+            <ProductItem
+              key={p.id}
+              image={getImage(p.image)}
+              id={p.id}
+              name={p.name}
+              basePrice={p.basePrice}
+              totalFlavor={p.totalFlavor}
+              sizes={p.sizes as any}
+            />
+          ))}
       </Grid>
     </Box>
   );

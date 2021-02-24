@@ -1,7 +1,8 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
+import { green, purple } from "@material-ui/core/colors";
 import React, { useMemo } from "react";
 import { Selected } from "../../containers/selected-container";
+import { Option } from "../../generated/apolloComponent";
 import { IOption } from "../../interfaces/option";
 import { Overlay } from "./overlay";
 
@@ -14,14 +15,14 @@ const useStyles = makeStyles({
     fontSize: 18,
     paddingBottom: 2,
     fontWeight: "bold",
-    color: green[800],
+    color: purple[800],
   },
   price: {
     fontSize: 16,
   },
 });
 
-const OptionItem: React.FC<IOption> = ({ optionname, price, optionid }) => {
+const OptionItem: React.FC<Pick<Option, "id" | "name" | "image" | "price">> = ({ id, name, image, price }) => {
   const classes = useStyles();
   const container = Selected.useContainer();
   return useMemo(
@@ -34,17 +35,17 @@ const OptionItem: React.FC<IOption> = ({ optionname, price, optionid }) => {
           margin="auto"
           width={"75%"}
           borderRadius={10}
-          bgcolor={green[100]}
+          bgcolor={purple[100]}
           onClick={() => {
-            container.setOption({ optionid, optionname, price });
+            container.setOption({ optionid: id, optionname: name, price });
           }}
         >
-          {container.selected.option?.optionid == optionid && <Overlay />}
+          {container.selected.option?.optionid == id && <Overlay />}
           <Box width={1} borderRadius={10} bgcolor={"white"}>
-            <img className={classes.img} src={"/images/some.png"} />
+            <img className={classes.img} src={image} />
           </Box>
           <Typography className={classes.name} align="center">
-            {optionname}
+            {name}
           </Typography>
           <Typography className={classes.price} style={{ color: green[600] }} align="center">
             {price}円
