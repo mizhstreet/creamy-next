@@ -3,7 +3,6 @@ import { green, purple } from "@material-ui/core/colors";
 import React, { useMemo } from "react";
 import { Selected } from "../../containers/selected-container";
 import { Option } from "../../generated/apolloComponent";
-import { IOption } from "../../interfaces/option";
 import { Overlay } from "./overlay";
 
 const useStyles = makeStyles({
@@ -37,10 +36,10 @@ const OptionItem: React.FC<Pick<Option, "id" | "name" | "image" | "price">> = ({
           borderRadius={10}
           bgcolor={purple[100]}
           onClick={() => {
-            container.setOption({ optionid: id, optionname: name, price });
+            container.setOption({ id, name, price });
           }}
         >
-          {container.selected.option?.optionid == id && <Overlay />}
+          {container.selected.option?.id == id && <Overlay />}
           <Box width={1} borderRadius={10} bgcolor={"white"}>
             <img className={classes.img} src={image} />
           </Box>

@@ -3,12 +3,12 @@ import { blue, grey, pink } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import { CheckboxWithLabel } from "formik-material-ui";
 import { OutlinedTextfield } from "../components/form/outlined-textfield";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { getEndpoint } from "../utils/getEndpoint";
+import { useLoginMutation } from "../generated/apolloComponent";
 
 interface IValues {
   username: string;
@@ -68,6 +68,8 @@ const Login: React.FC = () => {
   const classes = useStyles();
   const router = useRouter();
 
+  const [login] = useLoginMutation();
+
   const initialValues: IValues = {
     username: "",
     password: "",
@@ -97,21 +99,21 @@ const Login: React.FC = () => {
             initialValues={initialValues}
             onSubmit={async ({ username, password }, { setSubmitting }) => {
               setSubmitting(true);
-              axios
-                .post(
-                  getEndpoint("/api/auth/login"),
-                  { username, password },
-                  {
-                    withCredentials: true,
+              const { data, errors } = await login({
+                variables: {
+                  data: {
+                    username,
+                    password,
                   },
-                )
-                .then((response) => {
-                  if (response.data) {
-                    router.push("/");
-                  } else {
-                    setErrMsg("saodnaskd");
-                  }
-                });
+                },
+              });
+
+              if (data) {
+                router.replace("/");
+              }
+              if (errors) {
+                console.warn(errors);
+              }
             }}
           >
             {() => (

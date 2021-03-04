@@ -115,8 +115,8 @@ export type ReceiptItem = {
   quantity: Scalars['Float'];
   optionName: Scalars['String'];
   optionPrice: Scalars['Float'];
-  sizeName: Scalars['String'];
-  sizePrice: Scalars['Float'];
+  sizeName?: Maybe<Scalars['String']>;
+  sizePrice?: Maybe<Scalars['Float']>;
   flavors: Scalars['String'];
   created: Scalars['DateTime'];
   updated: Scalars['DateTime'];
@@ -126,7 +126,7 @@ export type ReceiptItem = {
 };
 
 export type WhereUniqueInput = {
-  id: Scalars['Float'];
+  id: Scalars['String'];
 };
 
 export type Mutation = {
@@ -235,13 +235,13 @@ export type CreateReceiptInput = {
 };
 
 export type CreateReceiptItemInput = {
-  productid: Scalars['Float'];
+  productid: Scalars['String'];
   price: Scalars['Float'];
   quantity: Scalars['Float'];
   optionName: Scalars['String'];
   optionPrice: Scalars['Float'];
-  sizeName: Scalars['String'];
-  sizePrice: Scalars['Float'];
+  sizeName?: Maybe<Scalars['String']>;
+  sizePrice?: Maybe<Scalars['Float']>;
   flavors: Scalars['String'];
 };
 
@@ -299,6 +299,53 @@ export type ProductsQuery = (
       & Pick<Size, 'id' | 'name' | 'price'>
     )> }
   )>> }
+);
+
+export type CreateReceiptMutationVariables = Exact<{
+  data: CreateReceiptInput;
+}>;
+
+
+export type CreateReceiptMutation = (
+  { __typename?: 'Mutation' }
+  & { createReceipt: (
+    { __typename?: 'Receipt' }
+    & Pick<Receipt, 'id' | 'total' | 'cash'>
+  ) }
+);
+
+export type ReceiptQueryVariables = Exact<{
+  where: WhereUniqueInput;
+}>;
+
+
+export type ReceiptQuery = (
+  { __typename?: 'Query' }
+  & { receipt?: Maybe<(
+    { __typename?: 'Receipt' }
+    & Pick<Receipt, 'id' | 'cash' | 'total' | 'created'>
+    & { items?: Maybe<Array<(
+      { __typename?: 'ReceiptItem' }
+      & Pick<ReceiptItem, 'id' | 'price' | 'quantity' | 'sizeName' | 'sizePrice' | 'optionName' | 'optionPrice' | 'flavors'>
+      & { product?: Maybe<(
+        { __typename?: 'Product' }
+        & Pick<Product, 'id' | 'name' | 'image'>
+      )> }
+    )>> }
+  )> }
+);
+
+export type LoginMutationVariables = Exact<{
+  data: LoginInput;
+}>;
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'name' | 'image'>
+  ) }
 );
 
 
@@ -413,3 +460,122 @@ export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<P
 export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
 export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
 export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
+export const CreateReceiptDocument = gql`
+    mutation CreateReceipt($data: CreateReceiptInput!) {
+  createReceipt(data: $data) {
+    id
+    total
+    cash
+  }
+}
+    `;
+export type CreateReceiptMutationFn = Apollo.MutationFunction<CreateReceiptMutation, CreateReceiptMutationVariables>;
+
+/**
+ * __useCreateReceiptMutation__
+ *
+ * To run a mutation, you first call `useCreateReceiptMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReceiptMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReceiptMutation, { data, loading, error }] = useCreateReceiptMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateReceiptMutation(baseOptions?: Apollo.MutationHookOptions<CreateReceiptMutation, CreateReceiptMutationVariables>) {
+        return Apollo.useMutation<CreateReceiptMutation, CreateReceiptMutationVariables>(CreateReceiptDocument, baseOptions);
+      }
+export type CreateReceiptMutationHookResult = ReturnType<typeof useCreateReceiptMutation>;
+export type CreateReceiptMutationResult = Apollo.MutationResult<CreateReceiptMutation>;
+export type CreateReceiptMutationOptions = Apollo.BaseMutationOptions<CreateReceiptMutation, CreateReceiptMutationVariables>;
+export const ReceiptDocument = gql`
+    query Receipt($where: WhereUniqueInput!) {
+  receipt(where: $where) {
+    id
+    cash
+    total
+    created
+    items {
+      id
+      product {
+        id
+        name
+        image
+      }
+      price
+      quantity
+      sizeName
+      sizePrice
+      optionName
+      optionPrice
+      flavors
+    }
+  }
+}
+    `;
+
+/**
+ * __useReceiptQuery__
+ *
+ * To run a query within a React component, call `useReceiptQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReceiptQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReceiptQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useReceiptQuery(baseOptions: Apollo.QueryHookOptions<ReceiptQuery, ReceiptQueryVariables>) {
+        return Apollo.useQuery<ReceiptQuery, ReceiptQueryVariables>(ReceiptDocument, baseOptions);
+      }
+export function useReceiptLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReceiptQuery, ReceiptQueryVariables>) {
+          return Apollo.useLazyQuery<ReceiptQuery, ReceiptQueryVariables>(ReceiptDocument, baseOptions);
+        }
+export type ReceiptQueryHookResult = ReturnType<typeof useReceiptQuery>;
+export type ReceiptLazyQueryHookResult = ReturnType<typeof useReceiptLazyQuery>;
+export type ReceiptQueryResult = Apollo.QueryResult<ReceiptQuery, ReceiptQueryVariables>;
+export const LoginDocument = gql`
+    mutation Login($data: LoginInput!) {
+  login(data: $data) {
+    id
+    name
+    image
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;

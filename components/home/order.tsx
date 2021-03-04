@@ -5,7 +5,6 @@ import { OrderItem } from "./order-item";
 
 const Order: React.FC = () => {
   const cart = Cart.useContainer();
-  console.log(cart.items);
   return (
     <Grid container>
       {cart.items.map((item, i) => (

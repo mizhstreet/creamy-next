@@ -1,5 +1,5 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { blue, grey, pink, purple } from "@material-ui/core/colors";
+import { blue, grey, purple } from "@material-ui/core/colors";
 import React from "react";
 import { IItem } from "../../containers/selected-container";
 

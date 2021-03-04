@@ -5,18 +5,17 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { theme } from "../theme/theme";
 import { ThemeProvider } from "@material-ui/core";
 import { Auth } from "../containers/auth-container";
-import { useApollo } from "../lib/apolloClient";
-import { ApolloProvider } from "@apollo/react-hooks";
+import { ApolloProvider } from "@apollo/client";
+import { useApollo } from "../lib/apollo";
 
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
-  const apolloClient = useApollo(pageProps.initialApolloState);
+function App({ Component, pageProps }: any): JSX.Element {
+  const apolloClient = useApollo(pageProps);
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side")!;
     if (jssStyles) {
       jssStyles.parentElement!.removeChild(jssStyles);
     }
   });
-
   return (
     <ApolloProvider client={apolloClient}>
       <Auth.Provider>
@@ -32,3 +31,5 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     </ApolloProvider>
   );
 }
+
+export default App;

@@ -1,9 +1,8 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { grey, pink } from "@material-ui/core/colors";
+import { grey } from "@material-ui/core/colors";
 import React from "react";
 import { Selected, TFlavor } from "../../containers/selected-container";
 import { Overlay } from "./overlay";
-import { Flavor } from "../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   img: {

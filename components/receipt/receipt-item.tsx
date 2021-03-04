@@ -1,6 +1,7 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
 import { blue, grey, pink, purple } from "@material-ui/core/colors";
 import React from "react";
+import { Product, ReceiptItem as ReceiptItemType } from "../../generated/apolloComponent";
 import { IReceiptItem } from "../../interfaces/receipt-items";
 import { getImage } from "../../utils/getImage";
 
@@ -47,17 +48,11 @@ const useStyles = makeStyles({
   },
 });
 
-const ReceiptItem: React.FC<IReceiptItem> = ({
-  productname,
-  size_name,
-  option_name,
-  option_price,
-  size_price,
-  price,
-  quantity,
-  flavors,
-  image,
-}) => {
+const ReceiptItem: React.FC<
+  Pick<ReceiptItemType, "flavors" | "price" | "sizeName" | "optionName" | "optionPrice" | "sizePrice" | "quantity"> & {
+    product: Pick<Product, "id" | "name" | "image"> | undefined | null;
+  }
+> = ({ flavors, price, sizeName, optionName, optionPrice, sizePrice, product, quantity }) => {
   function renderFlavors(flavors: string) {
     const flavorsArr = flavors.slice(0, -1).split(",");
     return flavorsArr.map((f, i) => (
@@ -80,16 +75,16 @@ const ReceiptItem: React.FC<IReceiptItem> = ({
             p={1}
             borderRadius={10}
           >
-            <img className={classes.img} src={getImage(image)} alt="" />
+            <img className={classes.img} src={getImage(product ? product.image : "")} alt="" />
           </Box>
           <Box pl={1.5}>
             <Typography className={classes.name}>
-              {productname}　{size_name}+{size_price}円
+              {product?.name}　{sizeName}+{sizePrice}円
             </Typography>
             {renderFlavors(flavors)}
             <Typography className={classes.price}>
-              {option_name}
-              {option_price != "0" && `+${option_price}円`}
+              {optionName}
+              {optionPrice != 0 && `+${optionPrice}円`}
             </Typography>
             <Typography className={classes.price}>{price}円</Typography>
           </Box>
@@ -98,9 +93,7 @@ const ReceiptItem: React.FC<IReceiptItem> = ({
       <Grid item md={6}>
         <Box display="flex" height={1} justifyContent="space-between" alignItems="center">
           <Typography className={classes.quantity}>{quantity}</Typography>
-          <Typography className={classes.itemTotal}>
-            {(parseInt(size_price || "0") + parseInt(price) + parseInt(option_price || "0")) * parseInt(quantity)}円
-          </Typography>
+          <Typography className={classes.itemTotal}>{((sizePrice || 0) + price + optionPrice) * quantity}円</Typography>
         </Box>
       </Grid>
     </Grid>

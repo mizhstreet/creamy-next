@@ -1,4 +1,4 @@
-import { gql } from "@apollo/react-hooks";
+import { gql } from "@apollo/client";
 export const optionsQuery = gql`
   query Options {
     options {

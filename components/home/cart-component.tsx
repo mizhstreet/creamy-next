@@ -2,7 +2,6 @@ import { Box, Button, Divider, Grid, makeStyles, Typography } from "@material-ui
 import { grey, pink, red } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
 import React from "react";
-import axios from "axios";
 import * as Yup from "yup";
 import { SectionTitle } from "../typography/section-title";
 import { Order } from "./order";
@@ -11,7 +10,7 @@ import { OutlinedTextfield } from "../form/outlined-textfield";
 import { Cart } from "../../containers/cart-container";
 import { VirtualKeyboard } from "./virtual-keyboard";
 import { useRouter } from "next/router";
-import { getEndpoint } from "../../utils/getEndpoint";
+import { useCreateReceiptMutation } from "../../generated/apolloComponent";
 
 export interface IValues {
   cash: number;
@@ -81,6 +80,8 @@ const CartComponent: React.FC = () => {
   const initialValues: IValues = {
     cash: 0,
   };
+
+  const [createReceipt] = useCreateReceiptMutation();
   return (
     <Grid item md={4}>
       <Box width={1} pl={5} pr={5}>
@@ -100,19 +101,34 @@ const CartComponent: React.FC = () => {
             <Formik
               initialValues={initialValues}
               validationSchema={DisplayingErrorMessagesSchema}
-              onSubmit={(values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting }) => {
                 setSubmitting(true);
-                axios
-                  .post(
-                    getEndpoint("/api/receipt/create"),
-                    { data: container.items, cash: values.cash },
-                    {
-                      withCredentials: true,
-                    },
-                  )
-                  .then((response) => {
-                    router.push(`/receipt?id=${response.data}`);
-                  });
+                const myData = {
+                  cash: parseInt(values.cash as any),
+                  total: container.getTotal(),
+                  items: container.items.map((i) => ({
+                    productid: i.product?.id,
+                    price: i.product?.basePrice,
+                    optionName: i.option?.name,
+                    optionPrice: i.option?.price,
+                    sizeName: i.size?.name,
+                    sizePrice: i.size?.price,
+                    quantity: 1,
+                    flavors: i.flavors.map((f) => f.name).toString(),
+                  })),
+                };
+                console.log(container.items);
+                const { data, errors } = await createReceipt({
+                  variables: {
+                    data: myData,
+                  },
+                });
+                if (data?.createReceipt.id) {
+                  return router.push(`/receipt?id=${data.createReceipt.id}`);
+                }
+                if (errors) {
+                  console.warn(errors);
+                }
               }}
             >
               {({ values }) => (

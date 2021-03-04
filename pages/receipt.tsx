@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import axios from "axios";
 import { NextPage } from "next";
@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { Page } from "../components/page";
 import { ReceiptItem } from "../components/receipt/receipt-item";
+import { useReceiptQuery } from "../generated/apolloComponent";
 import { IReceipt } from "../interfaces/receipt";
 import { getEndpoint } from "../utils/getEndpoint";
 
@@ -39,23 +40,25 @@ const useStyles = makeStyles({
 const ReceiptPage: NextPage = () => {
   const classes = useStyles();
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const [receipt, setReceipts] = useState<IReceipt>();
+  const { loading, data, error } = useReceiptQuery({
+    variables: {
+      where: {
+        id: "5",
+      },
+    },
+  });
 
-  const loadReceipts = useCallback(() => {
-    axios.get<IReceipt>(getEndpoint(`/api/receipt?id=${router.query.id}`)).then((response) => {
-      setReceipts(response.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    loadReceipts();
-  }, [loadReceipts]);
-
-  if (!receipt) {
-    return <div></div>;
+  if (loading) {
+    return <CircularProgress />;
   }
+
+  if (error) {
+    console.warn(error);
+  }
+
+  const receipt = data?.receipt;
 
   return (
     <Page title="レシート">
@@ -64,13 +67,24 @@ const ReceiptPage: NextPage = () => {
           <Grid style={{ height: 1000 }} item md={7}>
             <Box width={1} pl={5} pr={5}>
               <Typography component="h2" className={classes.receiptNum}>
-                レシート#{receipt.receiptid}
+                レシート#{receipt.id}
               </Typography>
-              <Typography className={classes.receiptDate}>日時:{receipt.created_at}</Typography>
+              <Typography className={classes.receiptDate}>日時:{receipt.created}</Typography>
               <Box component={"ul"} p={0} pt={5}>
-                {receipt.items.map((i) => (
-                  <ReceiptItem key={i.receipt_itemid} {...i} />
-                ))}
+                {receipt.items &&
+                  receipt.items.map((i) => (
+                    <ReceiptItem
+                      key={i.id}
+                      price={i.price}
+                      sizeName={i.sizeName}
+                      sizePrice={i.sizePrice}
+                      optionName={i.optionName}
+                      optionPrice={i.optionPrice}
+                      flavors={i.flavors}
+                      quantity={i.quantity}
+                      product={i.product}
+                    />
+                  ))}
               </Box>
               <Divider />
               <Grid justify="flex-end" container>
@@ -113,10 +127,6 @@ const ReceiptPage: NextPage = () => {
       )}
     </Page>
   );
-};
-
-ReceiptPage.getInitialProps = async () => {
-  return {};
 };
 
 export default ReceiptPage;

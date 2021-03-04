@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { createContainer } from "unstated-next";
-import { IItem } from "./selected-container";
+import { TFlavor, TOption, TProduct, TSize } from "./selected-container";
+
+interface IItem {
+  product: TProduct;
+  flavors: TFlavor[];
+  option: TOption;
+  size: TSize;
+}
 
 type qa = {
   quantity: number;
@@ -21,7 +28,7 @@ function useCart() {
   const getTotal = (): number => {
     let total = 0;
     items.forEach((i) => {
-      if (i.product && i.size && i.option) {
+      if (i.product && i.option) {
         total +=
           (i.option?.price + i.product?.basePrice + parseInt(i.size?.price ? (i.size.price as any) : "0")) * i.quantity;
       }
