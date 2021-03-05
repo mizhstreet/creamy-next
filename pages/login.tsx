@@ -68,7 +68,7 @@ const Login: React.FC = () => {
   const classes = useStyles();
   const router = useRouter();
 
-  const [login] = useLoginMutation();
+  const [result, login] = useLoginMutation();
 
   const initialValues: IValues = {
     username: "",
@@ -99,20 +99,18 @@ const Login: React.FC = () => {
             initialValues={initialValues}
             onSubmit={async ({ username, password }, { setSubmitting }) => {
               setSubmitting(true);
-              const { data, errors } = await login({
-                variables: {
-                  data: {
-                    username,
-                    password,
-                  },
+              const { data, error } = await login({
+                data: {
+                  username,
+                  password,
                 },
               });
 
               if (data) {
                 router.replace("/");
               }
-              if (errors) {
-                console.warn(errors);
+              if (error) {
+                console.warn(error);
               }
             }}
           >

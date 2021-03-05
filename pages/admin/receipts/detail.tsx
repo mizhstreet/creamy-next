@@ -1,4 +1,4 @@
-import { Avatar, Box, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
+import { Avatar, Box, CircularProgress, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import axios from "axios";
 import { NextPage } from "next";
@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React, { useState, useCallback, useEffect } from "react";
 import { Page } from "../../../components/page";
 import { ReceiptItem } from "../../../components/receipt/receipt-item";
+import { useReceiptQuery } from "../../../generated/apolloComponent";
 import { IReceipt } from "../../../interfaces/receipt";
 import { getEndpoint } from "../../../utils/getEndpoint";
 import { getImage } from "../../../utils/getImage";
@@ -49,47 +50,60 @@ const useStyles = makeStyles({
 const ReceiptPage: NextPage = () => {
   const classes = useStyles();
   const router = useRouter();
+  const [result] = useReceiptQuery({
+    variables: {
+      where: {
+        id: "6",
+      },
+    },
+  });
+  const { fetching, data, error } = result;
 
-  const [receipt, setReceipts] = useState<IReceipt>();
-
-  const loadReceipts = useCallback(() => {
-    axios.get<IReceipt>(getEndpoint(`/api/receipt?id=${router.query.id}`)).then((response) => {
-      setReceipts(response.data);
-      console.log(response.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    loadReceipts();
-  }, [loadReceipts]);
-
-  if (!receipt) {
-    return <div></div>;
+  if (fetching) {
+    return <CircularProgress />;
   }
+
+  if (error) {
+    console.warn(error);
+  }
+
+  const receipt = data?.receipt;
   return (
     <Page title="レシート">
       <Grid container>
         <Grid style={{ height: 1000 }} item md={7}>
           <Box width={1} pl={5} pr={5}>
             <Typography component="h2" className={classes.receiptNum}>
-              レシート#{receipt?.receiptid}
+              レシート#{receipt?.id}
             </Typography>
-            <Box mt={1} mb={1} display="flex" alignItems="center">
+            {/* <Box mt={1} mb={1} display="flex" alignItems="center">
               <Avatar className={classes.avatar} src={receipt?.user.image ? getImage(receipt?.user.image) : ""} />
               <Box>
                 <Typography className={classes.staff}>担当者</Typography>
                 <Typography className={classes.staffName}>{receipt?.user.name}</Typography>
               </Box>
-            </Box>
+            </Box> */}
             <Box component={"ul"} p={0} pt={2}>
-              {receipt?.items.map((i) => (
-                <ReceiptItem key={i.receipt_itemid} {...i} />
-              ))}
+              {receipt &&
+                receipt.items &&
+                receipt.items.map((i) => (
+                  <ReceiptItem
+                    key={i.id}
+                    price={i.price}
+                    sizeName={i.sizeName}
+                    sizePrice={i.sizePrice}
+                    optionName={i.optionName}
+                    optionPrice={i.optionPrice}
+                    flavors={i.flavors}
+                    quantity={i.quantity}
+                    product={i.product}
+                  />
+                ))}
             </Box>
             <Divider />
             <Grid justify="flex-end" container>
               <Grid item md={6}>
-                <Typography className={classes.receiptDate}>{receipt?.created_at}</Typography>
+                <Typography className={classes.receiptDate}>{receipt?.created}</Typography>
               </Grid>
               <Grid item md={6}>
                 <Box width={1}>

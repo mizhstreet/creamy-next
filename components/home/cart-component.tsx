@@ -81,7 +81,7 @@ const CartComponent: React.FC = () => {
     cash: 0,
   };
 
-  const [createReceipt] = useCreateReceiptMutation();
+  const [result, createReceipt] = useCreateReceiptMutation();
   return (
     <Grid item md={4}>
       <Box width={1} pl={5} pr={5}>
@@ -118,16 +118,14 @@ const CartComponent: React.FC = () => {
                   })),
                 };
                 console.log(container.items);
-                const { data, errors } = await createReceipt({
-                  variables: {
-                    data: myData,
-                  },
+                await createReceipt({
+                  data: myData,
                 });
-                if (data?.createReceipt.id) {
-                  return router.push(`/receipt?id=${data.createReceipt.id}`);
+                if (result.data?.createReceipt.id) {
+                  return router.push(`/receipt?id=${result.data.createReceipt.id}`);
                 }
-                if (errors) {
-                  console.warn(errors);
+                if (result.error) {
+                  console.warn(result.error);
                 }
               }}
             >

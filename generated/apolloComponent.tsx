@@ -1,9 +1,10 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -359,30 +360,9 @@ export const FlavorsDocument = gql`
 }
     `;
 
-/**
- * __useFlavorsQuery__
- *
- * To run a query within a React component, call `useFlavorsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFlavorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFlavorsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useFlavorsQuery(baseOptions?: Apollo.QueryHookOptions<FlavorsQuery, FlavorsQueryVariables>) {
-        return Apollo.useQuery<FlavorsQuery, FlavorsQueryVariables>(FlavorsDocument, baseOptions);
-      }
-export function useFlavorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FlavorsQuery, FlavorsQueryVariables>) {
-          return Apollo.useLazyQuery<FlavorsQuery, FlavorsQueryVariables>(FlavorsDocument, baseOptions);
-        }
-export type FlavorsQueryHookResult = ReturnType<typeof useFlavorsQuery>;
-export type FlavorsLazyQueryHookResult = ReturnType<typeof useFlavorsLazyQuery>;
-export type FlavorsQueryResult = Apollo.QueryResult<FlavorsQuery, FlavorsQueryVariables>;
+export function useFlavorsQuery(options: Omit<Urql.UseQueryArgs<FlavorsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<FlavorsQuery>({ query: FlavorsDocument, ...options });
+};
 export const OptionsDocument = gql`
     query Options {
   options {
@@ -395,30 +375,9 @@ export const OptionsDocument = gql`
 }
     `;
 
-/**
- * __useOptionsQuery__
- *
- * To run a query within a React component, call `useOptionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useOptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOptionsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useOptionsQuery(baseOptions?: Apollo.QueryHookOptions<OptionsQuery, OptionsQueryVariables>) {
-        return Apollo.useQuery<OptionsQuery, OptionsQueryVariables>(OptionsDocument, baseOptions);
-      }
-export function useOptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OptionsQuery, OptionsQueryVariables>) {
-          return Apollo.useLazyQuery<OptionsQuery, OptionsQueryVariables>(OptionsDocument, baseOptions);
-        }
-export type OptionsQueryHookResult = ReturnType<typeof useOptionsQuery>;
-export type OptionsLazyQueryHookResult = ReturnType<typeof useOptionsLazyQuery>;
-export type OptionsQueryResult = Apollo.QueryResult<OptionsQuery, OptionsQueryVariables>;
+export function useOptionsQuery(options: Omit<Urql.UseQueryArgs<OptionsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<OptionsQuery>({ query: OptionsDocument, ...options });
+};
 export const ProductsDocument = gql`
     query Products {
   products {
@@ -436,30 +395,9 @@ export const ProductsDocument = gql`
 }
     `;
 
-/**
- * __useProductsQuery__
- *
- * To run a query within a React component, call `useProductsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProductsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useProductsQuery(baseOptions?: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
-        return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, baseOptions);
-      }
-export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
-          return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, baseOptions);
-        }
-export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
-export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
-export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
+export function useProductsQuery(options: Omit<Urql.UseQueryArgs<ProductsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ProductsQuery>({ query: ProductsDocument, ...options });
+};
 export const CreateReceiptDocument = gql`
     mutation CreateReceipt($data: CreateReceiptInput!) {
   createReceipt(data: $data) {
@@ -469,31 +407,10 @@ export const CreateReceiptDocument = gql`
   }
 }
     `;
-export type CreateReceiptMutationFn = Apollo.MutationFunction<CreateReceiptMutation, CreateReceiptMutationVariables>;
 
-/**
- * __useCreateReceiptMutation__
- *
- * To run a mutation, you first call `useCreateReceiptMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateReceiptMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createReceiptMutation, { data, loading, error }] = useCreateReceiptMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useCreateReceiptMutation(baseOptions?: Apollo.MutationHookOptions<CreateReceiptMutation, CreateReceiptMutationVariables>) {
-        return Apollo.useMutation<CreateReceiptMutation, CreateReceiptMutationVariables>(CreateReceiptDocument, baseOptions);
-      }
-export type CreateReceiptMutationHookResult = ReturnType<typeof useCreateReceiptMutation>;
-export type CreateReceiptMutationResult = Apollo.MutationResult<CreateReceiptMutation>;
-export type CreateReceiptMutationOptions = Apollo.BaseMutationOptions<CreateReceiptMutation, CreateReceiptMutationVariables>;
+export function useCreateReceiptMutation() {
+  return Urql.useMutation<CreateReceiptMutation, CreateReceiptMutationVariables>(CreateReceiptDocument);
+};
 export const ReceiptDocument = gql`
     query Receipt($where: WhereUniqueInput!) {
   receipt(where: $where) {
@@ -520,31 +437,9 @@ export const ReceiptDocument = gql`
 }
     `;
 
-/**
- * __useReceiptQuery__
- *
- * To run a query within a React component, call `useReceiptQuery` and pass it any options that fit your needs.
- * When your component renders, `useReceiptQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useReceiptQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useReceiptQuery(baseOptions: Apollo.QueryHookOptions<ReceiptQuery, ReceiptQueryVariables>) {
-        return Apollo.useQuery<ReceiptQuery, ReceiptQueryVariables>(ReceiptDocument, baseOptions);
-      }
-export function useReceiptLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReceiptQuery, ReceiptQueryVariables>) {
-          return Apollo.useLazyQuery<ReceiptQuery, ReceiptQueryVariables>(ReceiptDocument, baseOptions);
-        }
-export type ReceiptQueryHookResult = ReturnType<typeof useReceiptQuery>;
-export type ReceiptLazyQueryHookResult = ReturnType<typeof useReceiptLazyQuery>;
-export type ReceiptQueryResult = Apollo.QueryResult<ReceiptQuery, ReceiptQueryVariables>;
+export function useReceiptQuery(options: Omit<Urql.UseQueryArgs<ReceiptQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ReceiptQuery>({ query: ReceiptDocument, ...options });
+};
 export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
   login(data: $data) {
@@ -554,28 +449,7 @@ export const LoginDocument = gql`
   }
 }
     `;
-export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
-/**
- * __useLoginMutation__
- *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
-      }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};

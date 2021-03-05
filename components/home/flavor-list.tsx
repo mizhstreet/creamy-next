@@ -5,9 +5,11 @@ import { getImage } from "../../utils/getImage";
 import { FlavorItem } from "./flavor-item";
 
 const FlavorList: React.FC = () => {
-  const { data, loading, error } = useFlavorsQuery();
+  const [result] = useFlavorsQuery();
 
-  if (loading) {
+  const { data, fetching, error } = result;
+
+  if (fetching) {
     return <CircularProgress />;
   }
 

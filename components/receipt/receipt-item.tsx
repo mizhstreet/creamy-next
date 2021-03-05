@@ -1,8 +1,7 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { blue, grey, pink, purple } from "@material-ui/core/colors";
+import { blue, grey, purple } from "@material-ui/core/colors";
 import React from "react";
 import { Product, ReceiptItem as ReceiptItemType } from "../../generated/apolloComponent";
-import { IReceiptItem } from "../../interfaces/receipt-items";
 import { getImage } from "../../utils/getImage";
 
 const useStyles = makeStyles({
@@ -54,7 +53,7 @@ const ReceiptItem: React.FC<
   }
 > = ({ flavors, price, sizeName, optionName, optionPrice, sizePrice, product, quantity }) => {
   function renderFlavors(flavors: string) {
-    const flavorsArr = flavors.slice(0, -1).split(",");
+    const flavorsArr = flavors.slice(0).split(",");
     return flavorsArr.map((f, i) => (
       <Typography key={i} className={classes.flavor}>
         {f}

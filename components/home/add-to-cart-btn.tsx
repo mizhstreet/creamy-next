@@ -40,7 +40,7 @@ const AddToCartBtn: React.FC = () => {
         onClick={() => {
           const arr = [...selected.selected.flavors];
           const item1 = { ...selected.selected, flavors: arr, quantity: 1 };
-          cart.addToCart(item1);
+          cart.addToCart(item1 as any);
           selected.reset();
         }}
       >

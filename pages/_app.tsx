@@ -5,11 +5,12 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { theme } from "../theme/theme";
 import { ThemeProvider } from "@material-ui/core";
 import { Auth } from "../containers/auth-container";
-import { ApolloProvider } from "@apollo/client";
-import { useApollo } from "../lib/apollo";
+import { Provider } from "urql";
+import { client } from "../lib/urqlClient";
+// import { ApolloProvider } from "@apollo/client";
+// import { useApollo } from "../lib/apollo";
 
 function App({ Component, pageProps }: any): JSX.Element {
-  const apolloClient = useApollo(pageProps);
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side")!;
     if (jssStyles) {
@@ -17,7 +18,7 @@ function App({ Component, pageProps }: any): JSX.Element {
     }
   });
   return (
-    <ApolloProvider client={apolloClient}>
+    <Provider value={client}>
       <Auth.Provider>
         <Head>
           <title>My page</title>
@@ -28,7 +29,7 @@ function App({ Component, pageProps }: any): JSX.Element {
           <Component {...pageProps} />
         </ThemeProvider>
       </Auth.Provider>
-    </ApolloProvider>
+    </Provider>
   );
 }
 

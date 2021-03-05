@@ -5,9 +5,11 @@ import { getImage } from "../../utils/getImage";
 import { ProductItem } from "./product-item";
 
 const ProductList: React.FC = () => {
-  const { loading, data, error } = useProductsQuery();
+  const [result] = useProductsQuery();
 
-  if (loading) {
+  const { data, fetching, error } = result;
+
+  if (fetching) {
     if (data?.products) {
       const a = data?.products[0];
       console.log(a);

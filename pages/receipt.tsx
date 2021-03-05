@@ -1,14 +1,12 @@
 import { Box, CircularProgress, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import axios from "axios";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { Page } from "../components/page";
 import { ReceiptItem } from "../components/receipt/receipt-item";
 import { useReceiptQuery } from "../generated/apolloComponent";
-import { IReceipt } from "../interfaces/receipt";
-import { getEndpoint } from "../utils/getEndpoint";
+import { parseDate } from "../utils/parseDate";
 
 const useStyles = makeStyles({
   receiptNum: {
@@ -41,16 +39,16 @@ const ReceiptPage: NextPage = () => {
   const classes = useStyles();
 
   // const router = useRouter();
-
-  const { loading, data, error } = useReceiptQuery({
+  const [result] = useReceiptQuery({
     variables: {
       where: {
-        id: "5",
+        id: "6",
       },
     },
   });
+  const { fetching, data, error } = result;
 
-  if (loading) {
+  if (fetching) {
     return <CircularProgress />;
   }
 
@@ -69,7 +67,7 @@ const ReceiptPage: NextPage = () => {
               <Typography component="h2" className={classes.receiptNum}>
                 レシート#{receipt.id}
               </Typography>
-              <Typography className={classes.receiptDate}>日時:{receipt.created}</Typography>
+              <Typography className={classes.receiptDate}>日時:{parseDate(receipt.created)}</Typography>
               <Box component={"ul"} p={0} pt={5}>
                 {receipt.items &&
                   receipt.items.map((i) => (

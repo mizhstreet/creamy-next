@@ -5,8 +5,9 @@ import { getImage } from "../../utils/getImage";
 import { useOptionsQuery } from "../../generated/apolloComponent";
 
 const OptionList: React.FC = () => {
-  const { loading, data, error } = useOptionsQuery();
-  if (loading) {
+  const [result] = useOptionsQuery();
+  const { fetching, data, error } = result;
+  if (fetching) {
     return <CircularProgress />;
   }
   if (error) {
