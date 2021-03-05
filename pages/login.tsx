@@ -4,7 +4,7 @@ import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { OutlinedTextfield } from "../components/form/outlined-textfield";
-import axios from "axios";
+
 import { useRouter } from "next/router";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { getEndpoint } from "../utils/getEndpoint";

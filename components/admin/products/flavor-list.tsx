@@ -2,7 +2,7 @@ import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import React, { useCallback, useEffect, useState } from "react";
 import { grey } from "@material-ui/core/colors";
 import { IFlavor } from "../../../interfaces/flavor";
-import axios from "axios";
+
 import { FlavorItem } from "./flavor-item";
 import { getEndpoint } from "../../../utils/getEndpoint";
 

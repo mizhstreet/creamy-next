@@ -1,12 +1,14 @@
 import { Box, CircularProgress, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { NextPage } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
-import { Page } from "../components/page";
-import { ReceiptItem } from "../components/receipt/receipt-item";
-import { useReceiptQuery } from "../generated/apolloComponent";
-import { parseDate } from "../utils/parseDate";
+import { Page } from "../../components/page";
+import { ReceiptItem } from "../../components/receipt/receipt-item";
+import { ReceiptQuery, ReceiptQueryVariables, useReceiptQuery } from "../../generated/apolloComponent";
+import { receiptQuery } from "../../graphql/receipt/queries/receipt";
+import { client, ssrCache } from "../../lib/urqlClient";
+import { parseDate } from "../../utils/parseDate";
 
 const useStyles = makeStyles({
   receiptNum: {
@@ -38,11 +40,11 @@ const useStyles = makeStyles({
 const ReceiptPage: NextPage = () => {
   const classes = useStyles();
 
-  // const router = useRouter();
+  const router = useRouter();
   const [result] = useReceiptQuery({
     variables: {
       where: {
-        id: "6",
+        id: router.query.id as any,
       },
     },
   });
@@ -115,16 +117,31 @@ const ReceiptPage: NextPage = () => {
           </Grid>
           <Grid style={{ height: 1000 }} item md={5}>
             <Box width={1} pl={5} pr={5}>
-              <img className={classes.img} src="images/thanks1.png" />
+              <img className={classes.img} src="/images/thanks1.png" />
             </Box>
             <Box width={1} pl={5} pr={5}>
-              <img className={classes.img2} src="images/thank2.png" />
+              <img className={classes.img2} src="/images/thank2.png" />
             </Box>
           </Grid>
         </Grid>
       )}
     </Page>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  await client
+    .query<ReceiptQuery, ReceiptQueryVariables>(receiptQuery, {
+      where: {
+        id: params?.id as any,
+      },
+    })
+    .toPromise();
+  return {
+    props: {
+      urqlState: ssrCache.extractData(),
+    },
+  };
 };
 
 export default ReceiptPage;

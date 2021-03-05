@@ -19,7 +19,7 @@ import { blue, green, grey, pink, red } from "@material-ui/core/colors";
 import { IFlavor } from "../../../interfaces/flavor";
 import WarningTwoToneIcon from "@material-ui/icons/WarningTwoTone";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import axios from "axios";
+
 import { Field, Form, Formik } from "formik";
 import { OutlinedTextfield } from "../../form/outlined-textfield";
 import { getImage } from "../../../utils/getImage";

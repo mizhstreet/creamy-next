@@ -12,6 +12,12 @@ import { Selected } from "../containers/selected-container";
 import { Cart } from "../containers/cart-container";
 import { CartComponent } from "../components/home/cart-component";
 import { AddToCartBtn } from "../components/home/add-to-cart-btn";
+import { GetStaticProps } from "next";
+import { client, ssrCache } from "../lib/urqlClient";
+import { productsQuery } from "../graphql/product/queries/products";
+import { FlavorsQuery, OptionsQuery, ProductsQuery } from "../generated/apolloComponent";
+import { optionsQuery } from "../graphql/option/queries/options";
+import { flavorsQuery } from "../graphql/flavor/queries/flavors";
 
 const Home: React.FC = () => {
   return (
@@ -39,5 +45,16 @@ const Home: React.FC = () => {
       </Selected.Provider>
     </Cart.Provider>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  await client.query<ProductsQuery>(productsQuery).toPromise();
+  await client.query<OptionsQuery>(optionsQuery).toPromise();
+  await client.query<FlavorsQuery>(flavorsQuery).toPromise();
+  return {
+    props: {
+      urqlState: ssrCache.extractData(),
+    },
+  };
 };
 export default Home;

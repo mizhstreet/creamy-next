@@ -17,7 +17,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { SectionTitle } from "../../../components/typography/section-title";
 import { Page } from "../../../components/page";
 import { IReceipt } from "../../../interfaces/receipt";
-import axios from "axios";
+
 import { IUser } from "../../../interfaces/user";
 import { ReceiptItem } from "../../../components/admin/receipts/receipt-item";
 import { getEndpoint } from "../../../utils/getEndpoint";

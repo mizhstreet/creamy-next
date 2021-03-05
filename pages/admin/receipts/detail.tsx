@@ -1,15 +1,11 @@
-import { Avatar, Box, CircularProgress, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import axios from "axios";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState, useCallback, useEffect } from "react";
+import React from "react";
 import { Page } from "../../../components/page";
 import { ReceiptItem } from "../../../components/receipt/receipt-item";
 import { useReceiptQuery } from "../../../generated/apolloComponent";
-import { IReceipt } from "../../../interfaces/receipt";
-import { getEndpoint } from "../../../utils/getEndpoint";
-import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
   avatar: {
@@ -135,10 +131,6 @@ const ReceiptPage: NextPage = () => {
       </Grid>
     </Page>
   );
-};
-
-ReceiptPage.getInitialProps = async () => {
-  return {};
 };
 
 export default ReceiptPage;

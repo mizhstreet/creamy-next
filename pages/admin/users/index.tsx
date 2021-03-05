@@ -20,7 +20,7 @@ import PersonAddTwoToneIcon from "@material-ui/icons/PersonAddTwoTone";
 import { SectionTitle } from "../../../components/typography/section-title";
 import { TransitionProps } from "@material-ui/core/transitions/transition";
 import { Page } from "../../../components/page";
-import axios from "axios";
+
 import { IUser } from "../../../interfaces/user";
 import { User } from "../../../components/admin/user/user";
 import { getEndpoint } from "../../../utils/getEndpoint";

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import { blue, grey, red } from "@material-ui/core/colors";
-import axios from "axios";
+
 import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({

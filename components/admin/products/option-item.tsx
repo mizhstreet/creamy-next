@@ -22,7 +22,7 @@ import WarningTwoToneIcon from "@material-ui/icons/WarningTwoTone";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { Field, Form, Formik } from "formik";
 import { OutlinedTextfield } from "../../form/outlined-textfield";
-import axios from "axios";
+
 import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
