@@ -1,10 +1,21 @@
-import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
+import {
+  CircularProgress,
+  makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { grey } from "@material-ui/core/colors";
 import { IOption } from "../../../interfaces/option";
 
 import { OptionItem } from "./option-item";
 import { getEndpoint } from "../../../utils/getEndpoint";
+import { useOptionsQuery } from "../../../generated/apolloComponent";
+import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
   tableContainer: {},
@@ -29,17 +40,14 @@ const useStyles = makeStyles({
 
 const OptionList: React.FC = () => {
   const classes = useStyles();
-  const [options, setOptions] = useState<IOption[]>([]);
-
-  const loadOptions = useCallback(() => {
-    axios.get<IOption[]>(getEndpoint("/api/option/all")).then((response) => {
-      setOptions(response.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    loadOptions();
-  }, [loadOptions]);
+  const [result] = useOptionsQuery();
+  const { fetching, data, error } = result;
+  if (fetching) {
+    return <CircularProgress />;
+  }
+  if (error) {
+    console.warn(error);
+  }
   return (
     <TableContainer className={classes.tableContainer}>
       <Table className={classes.table} aria-label="simple table">
@@ -53,17 +61,18 @@ const OptionList: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {options.map((o) => (
-            <OptionItem
-              key={o.optionid}
-              optionid={o.optionid}
-              image={"asodknaskd"}
-              optionname={o.optionname}
-              stock={o.stock}
-              stock_price={o.stock_price}
-              price={o.price}
-            />
-          ))}
+          {data?.options &&
+            data?.options.map((o) => (
+              <OptionItem
+                key={o.id}
+                id={o.id}
+                image={getImage(o.image)}
+                name={o.name}
+                stock={o.stock}
+                stockPrice={o.stockPrice}
+                price={o.price}
+              />
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

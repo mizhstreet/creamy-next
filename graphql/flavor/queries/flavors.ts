@@ -5,6 +5,8 @@ export const flavorsQuery = gql`
       id
       name
       image
+      stock
+      stockPrice
     }
   }
 `;

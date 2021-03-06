@@ -22,7 +22,7 @@ import WarningTwoToneIcon from "@material-ui/icons/WarningTwoTone";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { Field, Form, Formik } from "formik";
 import { OutlinedTextfield } from "../../form/outlined-textfield";
-
+import { Option } from "../../../generated/apolloComponent";
 import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
@@ -126,7 +126,14 @@ const useStyles = makeStyles({
   tableHead: {},
 });
 
-const OptionItem: React.FC<IOption> = ({ optionid, optionname, stock, stock_price, price }) => {
+const OptionItem: React.FC<Pick<Option, "id" | "name" | "image" | "price" | "stock" | "stockPrice">> = ({
+  id,
+  name,
+  image,
+  price,
+  stock,
+  stockPrice,
+}) => {
   const classes = useStyles();
 
   const [cachedQuantity, setCachedQuantity] = useState<number>(-1);
@@ -154,36 +161,36 @@ const OptionItem: React.FC<IOption> = ({ optionid, optionname, stock, stock_pric
   };
 
   const handleDelete = async () => {
-    await axios.post("/web/api/option/delete", { optionid }).then((response) => {
-      if (response.data == "ok") {
-        setIsDeleted(true);
-      }
-    });
+    // await axios.post("/web/api/option/delete", { optionid }).then((response) => {
+    //   if (response.data == "ok") {
+    //     setIsDeleted(true);
+    //   }
+    // });
     handleClose();
   };
 
   const handleStock = async (quantity: string) => {
-    await axios.post("/web/api/option/add-to-stock", { optionid, quantity }).then((response) => {
-      if (response.data == "ok") {
-        if (cachedQuantity == -1) {
-          setCachedQuantity(parseInt(stock) + parseInt(quantity));
-        } else {
-          setCachedQuantity(cachedQuantity + parseInt(quantity));
-        }
-      }
-    });
+    // await axios.post("/web/api/option/add-to-stock", { optionid, quantity }).then((response) => {
+    //   if (response.data == "ok") {
+    //     if (cachedQuantity == -1) {
+    //       setCachedQuantity(parseInt(stock) + parseInt(quantity));
+    //     } else {
+    //       setCachedQuantity(cachedQuantity + parseInt(quantity));
+    //     }
+    //   }
+    // });
     handleClose();
   };
 
   return !isDeleted ? (
     <TableRow>
-      <TableCell className={classes.tableCell}>#{optionid}</TableCell>
+      <TableCell className={classes.tableCell}>#{id}</TableCell>
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           <Box maxWidth={60}>
-            <img className={classes.img} src={getImage("cone.jpg")} />
+            <img className={classes.img} src={image} />
           </Box>
-          <Typography className={classes.name}>{optionname}</Typography>
+          <Typography className={classes.name}>{name}</Typography>
         </Box>
       </TableCell>
       <TableCell className={classes.tableCell}>
@@ -221,13 +228,13 @@ const OptionItem: React.FC<IOption> = ({ optionid, optionname, stock, stock_pric
             <DialogTitle id="form-dialog-title">発注</DialogTitle>
 
             <DialogContent>
-              <DialogContentText>値段: {stock_price}円</DialogContentText>
+              <DialogContentText>値段: {stockPrice}円</DialogContentText>
               <Box display="flex" flexDirection="row" alignItems="center">
                 <Box width={1} display="flex" alignItems="center">
                   <Box maxWidth={60} bgcolor={pink[100]} borderRadius={10}>
-                    <img className={classes.img} src={"/images/4.png"} />
+                    <img className={classes.img} src={image} />
                   </Box>
-                  <Typography className={classes.name}>{optionname}</Typography>
+                  <Typography className={classes.name}>{name}</Typography>
                 </Box>
                 <Box>
                   <Form>
@@ -238,7 +245,7 @@ const OptionItem: React.FC<IOption> = ({ optionid, optionname, stock, stock_pric
                     </Box>
                     <Box width={1} textAlign="center">
                       <Typography className={classes.orderPricing}>
-                        {parseInt(props.values.quantity) * parseInt(stock_price)}円
+                        {parseInt(props.values.quantity) * stockPrice}円
                       </Typography>
                     </Box>
                   </Form>

@@ -16,13 +16,13 @@ import {
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import { blue, green, grey, pink, red } from "@material-ui/core/colors";
-import { IFlavor } from "../../../interfaces/flavor";
 import WarningTwoToneIcon from "@material-ui/icons/WarningTwoTone";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 import { Field, Form, Formik } from "formik";
 import { OutlinedTextfield } from "../../form/outlined-textfield";
 import { getImage } from "../../../utils/getImage";
+import { Flavor } from "../../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   img: {
@@ -125,7 +125,9 @@ const useStyles = makeStyles({
   tableHead: {},
 });
 
-const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_price, image }) => {
+type TFlavor = Omit<Flavor, "created" | "updated" | "deletedAt">;
+
+const FlavorItem: React.FC<TFlavor> = ({ id, name, stock, stockPrice, image }) => {
   const classes = useStyles();
 
   const [cachedQuantity, setCachedQuantity] = useState<number>(-1);
@@ -153,42 +155,42 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_pric
   };
 
   const handleDelete = async () => {
-    await axios.post("/web/api/flavor/delete", { flavorid }).then((response) => {
-      if (response.data == "ok") {
-        setIsDeleted(true);
-      }
-    });
+    // await axios.post("/web/api/flavor/delete", { flavorid }).then((response) => {
+    //   if (response.data == "ok") {
+    //     setIsDeleted(true);
+    //   }
+    // });
     handleDeleteClose();
   };
 
   const handleStock = async (quantity: string) => {
-    await axios.post("/web/api/flavor/add-to-stock", { flavorid, quantity }).then((response) => {
-      console.log(response.data);
-      if (response.data == "ok") {
-        if (cachedQuantity == -1) {
-          setCachedQuantity(parseInt(stock) + parseInt(quantity));
-        } else {
-          setCachedQuantity(cachedQuantity + parseInt(quantity));
-        }
-      }
-    });
+    // await axios.post("/web/api/flavor/add-to-stock", { flavorid, quantity }).then((response) => {
+    //   console.log(response.data);
+    //   if (response.data == "ok") {
+    //     if (cachedQuantity == -1) {
+    //       setCachedQuantity(parseInt(stock) + parseInt(quantity));
+    //     } else {
+    //       setCachedQuantity(cachedQuantity + parseInt(quantity));
+    //     }
+    //   }
+    // });
     handleClose();
   };
   return !isDeleted ? (
     <TableRow>
-      <TableCell className={classes.tableCell}>#{flavorid}</TableCell>
+      <TableCell className={classes.tableCell}>#{id}</TableCell>
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           <Box maxWidth={60}>
             <img className={classes.img} src={getImage(image)} />
           </Box>
-          <Typography className={classes.name}>{flavorname}</Typography>
+          <Typography className={classes.name}>{name}</Typography>
         </Box>
       </TableCell>
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           {cachedQuantity == -1 ? <Box>{stock}</Box> : cachedQuantity}
-          {parseInt(stock) < 10 && cachedQuantity < 10 && (
+          {stock < 10 && cachedQuantity < 10 && (
             <Tooltip title="もうすぐなくなる">
               <WarningTwoToneIcon style={{ color: red[400] }} />
             </Tooltip>
@@ -218,13 +220,13 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_pric
             <DialogTitle id="form-dialog-title">発注</DialogTitle>
 
             <DialogContent>
-              <DialogContentText>値段: {stock_price}円</DialogContentText>
+              <DialogContentText>値段: {stockPrice}円</DialogContentText>
               <Box display="flex" flexDirection="row" alignItems="center">
                 <Box width={1} display="flex" alignItems="center">
                   <Box maxWidth={60} bgcolor={pink[100]} borderRadius={10}>
                     <img className={classes.img} src={getImage(image)} />
                   </Box>
-                  <Typography className={classes.name}>{flavorname}</Typography>
+                  <Typography className={classes.name}>{name}</Typography>
                 </Box>
                 <Box>
                   <Form>
@@ -235,7 +237,7 @@ const FlavorItem: React.FC<IFlavor> = ({ flavorid, flavorname, stock, stock_pric
                     </Box>
                     <Box width={1} textAlign="center">
                       <Typography className={classes.orderPricing}>
-                        {parseInt(props.values.quantity) * parseInt(stock_price)}円
+                        {parseInt(props.values.quantity) * stockPrice}円
                       </Typography>
                     </Box>
                   </Form>

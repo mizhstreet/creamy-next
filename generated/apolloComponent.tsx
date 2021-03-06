@@ -272,7 +272,7 @@ export type FlavorsQuery = (
   { __typename?: 'Query' }
   & { flavors?: Maybe<Array<(
     { __typename?: 'Flavor' }
-    & Pick<Flavor, 'id' | 'name' | 'image'>
+    & Pick<Flavor, 'id' | 'name' | 'image' | 'stock' | 'stockPrice'>
   )>> }
 );
 
@@ -283,7 +283,7 @@ export type OptionsQuery = (
   { __typename?: 'Query' }
   & { options?: Maybe<Array<(
     { __typename?: 'Option' }
-    & Pick<Option, 'id' | 'name' | 'image' | 'price' | 'stock'>
+    & Pick<Option, 'id' | 'name' | 'image' | 'price' | 'stock' | 'stockPrice'>
   )>> }
 );
 
@@ -356,6 +356,8 @@ export const FlavorsDocument = gql`
     id
     name
     image
+    stock
+    stockPrice
   }
 }
     `;
@@ -371,6 +373,7 @@ export const OptionsDocument = gql`
     image
     price
     stock
+    stockPrice
   }
 }
     `;

@@ -1,10 +1,9 @@
-import { Avatar, Box, Button, Chip, makeStyles, TableCell, TableRow, Typography } from "@material-ui/core";
+import { Box, Button, Chip, makeStyles, TableCell, TableRow, Typography } from "@material-ui/core";
 import React from "react";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
-import { blue, green, grey, pink, red } from "@material-ui/core/colors";
-import { IProduct } from "../../../interfaces/product";
-import { ISize } from "../../../interfaces/size";
+import { blue, green, grey, red } from "@material-ui/core/colors";
+import { Product, Size } from "../../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   img: {
@@ -107,33 +106,30 @@ const useStyles = makeStyles({
   tableHead: {},
 });
 
-const ProductItem: React.FC<IProduct & { sizes: ISize[] }> = ({ productid, productname, base_price, sizes }) => {
+export type TProduct = Omit<Product, "created" | "updated" | "deletedAt" | "sizes">;
+type TSize = Omit<Size, "created" | "updated" | "deletedAt">;
+
+const ProductItem: React.FC<TProduct & { sizes: TSize[] }> = ({ id, name, basePrice, sizes, image }) => {
   const classes = useStyles();
   return (
     <TableRow>
-      <TableCell className={classes.tableCell}>#{productid}</TableCell>
+      <TableCell className={classes.tableCell}>#{id}</TableCell>
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
-          <Box maxWidth={60} bgcolor={pink[100]} borderRadius={10}>
-            <img className={classes.img} src={"/images/4.png"} />
+          <Box maxWidth={60} bgcolor={blue[100]} borderRadius={10}>
+            <img className={classes.img} src={image} />
           </Box>
-          <Typography className={classes.name}>{productname}</Typography>
+          <Typography className={classes.name}>{name}</Typography>
         </Box>
       </TableCell>
-      <TableCell className={classes.tableCell}>{base_price}円</TableCell>
+      <TableCell className={classes.tableCell}>{basePrice}円</TableCell>
       <TableCell className={classes.tableCell}>
         {sizes.map((s) => {
-          if (s.productid == productid) {
-            return (
-              <Chip
-                key={s.product_sizeid}
-                label={`${s.product_sizename} ${s.additionalprice != 0 ? `+${s.additionalprice}円` : ""}`}
-                clickable
-                color="primary"
-              />
-            );
-          }
+          return (
+            <Chip key={s.id} label={`${s.name} ${s.price != 0 ? `+${s.price}円` : ""}`} clickable color="primary" />
+          );
         })}
+        {sizes.length == 0 && <Chip label={`なし`} clickable color="secondary" />}
       </TableCell>
       <TableCell className={classes.tableCell}>
         <Button disableElevation className={classes.editBtn} variant="contained">

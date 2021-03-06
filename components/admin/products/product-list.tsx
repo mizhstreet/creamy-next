@@ -1,11 +1,18 @@
-import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
-import React, { useCallback, useEffect, useState } from "react";
+import {
+  CircularProgress,
+  makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
+import React from "react";
 import { grey } from "@material-ui/core/colors";
-import { IProduct } from "../../../interfaces/product";
-
 import { ProductItem } from "./product-item";
-import { ISize } from "../../../interfaces/size";
-import { getEndpoint } from "../../../utils/getEndpoint";
+import { useProductsQuery } from "../../../generated/apolloComponent";
+import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
   tableContainer: {},
@@ -30,28 +37,20 @@ const useStyles = makeStyles({
 
 const ProductList: React.FC = () => {
   const classes = useStyles();
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [sizes, setSizes] = useState<ISize[]>([]);
-  const loadProducts = useCallback(() => {
-    axios.get<IProduct[]>(getEndpoint("/api/product/all")).then((response) => {
-      setProducts(response.data);
-    });
-  }, []);
+  const [result] = useProductsQuery();
 
-  useEffect(() => {
-    loadProducts();
-  }, [loadProducts]);
+  const { data, fetching, error } = result;
 
-  const loadSizes = useCallback(() => {
-    axios.get<ISize[]>(getEndpoint("/api/size/all")).then((response) => {
-      setSizes(response.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    loadSizes();
-  }, [loadSizes]);
-
+  if (fetching) {
+    if (data?.products) {
+      const a = data?.products[0];
+      console.log(a);
+    }
+    return <CircularProgress />;
+  }
+  if (error) {
+    console.warn(error);
+  }
   return (
     <TableContainer className={classes.tableContainer}>
       <Table className={classes.table} aria-label="simple table">
@@ -65,17 +64,18 @@ const ProductList: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.map((p) => (
-            <ProductItem
-              sizes={sizes}
-              key={p.productid}
-              image={"/images/some.png"}
-              productid={p.productid}
-              productname={p.productname}
-              base_price={p.base_price}
-              totalflavor={p.totalflavor}
-            />
-          ))}
+          {data?.products &&
+            data?.products.map((p) => (
+              <ProductItem
+                sizes={p.sizes}
+                key={p.id}
+                image={getImage(p.image)}
+                id={p.id}
+                name={p.name}
+                basePrice={p.basePrice}
+                totalFlavor={p.totalFlavor}
+              />
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

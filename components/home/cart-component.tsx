@@ -118,13 +118,13 @@ const CartComponent: React.FC = () => {
                   })),
                 };
                 console.log(container.items);
-                await createReceipt({
+                const { data, error } = await createReceipt({
                   data: myData,
                 });
-                if (result.data?.createReceipt.id) {
-                  return router.push(`/receipt?id=${result.data.createReceipt.id}`);
+                if (data?.createReceipt.id) {
+                  return router.push(`/receipt/${data?.createReceipt.id}`);
                 }
-                if (result.error) {
+                if (error) {
                   console.warn(result.error);
                 }
               }}

@@ -1,10 +1,17 @@
-import { makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
-import React, { useCallback, useEffect, useState } from "react";
+import {
+  CircularProgress,
+  makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
+import React from "react";
 import { grey } from "@material-ui/core/colors";
-import { IFlavor } from "../../../interfaces/flavor";
-
 import { FlavorItem } from "./flavor-item";
-import { getEndpoint } from "../../../utils/getEndpoint";
+import { useFlavorsQuery } from "../../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   tableContainer: {},
@@ -29,17 +36,17 @@ const useStyles = makeStyles({
 
 const FlavorList: React.FC = () => {
   const classes = useStyles();
-  const [flavors, setFlavors] = useState<IFlavor[]>([]);
+  const [result] = useFlavorsQuery();
 
-  const loadFlavors = useCallback(() => {
-    axios.get<IFlavor[]>(getEndpoint("/api/flavor/all")).then((response) => {
-      setFlavors(response.data);
-    });
-  }, []);
+  const { data, fetching, error } = result;
 
-  useEffect(() => {
-    loadFlavors();
-  }, [loadFlavors]);
+  if (fetching) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    console.warn(error);
+  }
   return (
     <TableContainer className={classes.tableContainer}>
       <Table className={classes.table} aria-label="simple table">
@@ -51,11 +58,7 @@ const FlavorList: React.FC = () => {
             <TableCell className={classes.tableHeadline}>Action</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {flavors.map((f) => (
-            <FlavorItem key={f.flavorid} {...f} />
-          ))}
-        </TableBody>
+        <TableBody>{data?.flavors && data?.flavors.map((f) => <FlavorItem key={f.id} {...f} />)}</TableBody>
       </Table>
     </TableContainer>
   );

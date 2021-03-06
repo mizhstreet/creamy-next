@@ -7,6 +7,7 @@ export const optionsQuery = gql`
       image
       price
       stock
+      stockPrice
     }
   }
 `;
