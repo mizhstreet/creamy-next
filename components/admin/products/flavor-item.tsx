@@ -22,7 +22,7 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { Field, Form, Formik } from "formik";
 import { OutlinedTextfield } from "../../form/outlined-textfield";
 import { getImage } from "../../../utils/getImage";
-import { Flavor } from "../../../generated/apolloComponent";
+import { Flavor, useDeleteFlavorMutation, useUpdateStockFlavorMutation } from "../../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   img: {
@@ -130,6 +130,10 @@ type TFlavor = Omit<Flavor, "created" | "updated" | "deletedAt">;
 const FlavorItem: React.FC<TFlavor> = ({ id, name, stock, stockPrice, image }) => {
   const classes = useStyles();
 
+  const [updateStockResult, updateStock] = useUpdateStockFlavorMutation();
+
+  const [deleteResult, deleteFlavor] = useDeleteFlavorMutation();
+
   const [cachedQuantity, setCachedQuantity] = useState<number>(-1);
 
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
@@ -155,25 +159,32 @@ const FlavorItem: React.FC<TFlavor> = ({ id, name, stock, stockPrice, image }) =
   };
 
   const handleDelete = async () => {
-    // await axios.post("/web/api/flavor/delete", { flavorid }).then((response) => {
-    //   if (response.data == "ok") {
-    //     setIsDeleted(true);
-    //   }
-    // });
+    const { data } = await deleteFlavor({
+      where: {
+        id,
+      },
+    });
+
+    if (data) {
+      setIsDeleted(true);
+    }
+
     handleDeleteClose();
   };
 
   const handleStock = async (quantity: string) => {
-    // await axios.post("/web/api/flavor/add-to-stock", { flavorid, quantity }).then((response) => {
-    //   console.log(response.data);
-    //   if (response.data == "ok") {
-    //     if (cachedQuantity == -1) {
-    //       setCachedQuantity(parseInt(stock) + parseInt(quantity));
-    //     } else {
-    //       setCachedQuantity(cachedQuantity + parseInt(quantity));
-    //     }
-    //   }
-    // });
+    const { data } = await updateStock({
+      where: {
+        id,
+      },
+      set: {
+        stock: parseInt(quantity),
+      },
+    });
+
+    if (data) {
+      setCachedQuantity(data.updateStockFlavor.stock);
+    }
     handleClose();
   };
   return !isDeleted ? (

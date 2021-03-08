@@ -17,13 +17,11 @@ import React, { useState } from "react";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import { blue, green, grey, pink, red } from "@material-ui/core/colors";
-import { IOption } from "../../../interfaces/option";
 import WarningTwoToneIcon from "@material-ui/icons/WarningTwoTone";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { Field, Form, Formik } from "formik";
 import { OutlinedTextfield } from "../../form/outlined-textfield";
-import { Option } from "../../../generated/apolloComponent";
-import { getImage } from "../../../utils/getImage";
+import { Option, useDeleteOptionMutation, useUpdateStockOptionMutation } from "../../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   img: {
@@ -136,6 +134,10 @@ const OptionItem: React.FC<Pick<Option, "id" | "name" | "image" | "price" | "sto
 }) => {
   const classes = useStyles();
 
+  const [updateStockResult, updateStock] = useUpdateStockOptionMutation();
+
+  const [deleteResult, deleteOption] = useDeleteOptionMutation();
+
   const [cachedQuantity, setCachedQuantity] = useState<number>(-1);
 
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
@@ -161,24 +163,32 @@ const OptionItem: React.FC<Pick<Option, "id" | "name" | "image" | "price" | "sto
   };
 
   const handleDelete = async () => {
-    // await axios.post("/web/api/option/delete", { optionid }).then((response) => {
-    //   if (response.data == "ok") {
-    //     setIsDeleted(true);
-    //   }
-    // });
-    handleClose();
+    const { data } = await deleteOption({
+      where: {
+        id,
+      },
+    });
+
+    if (data) {
+      setIsDeleted(true);
+    }
+
+    handleDeleteClose();
   };
 
   const handleStock = async (quantity: string) => {
-    // await axios.post("/web/api/option/add-to-stock", { optionid, quantity }).then((response) => {
-    //   if (response.data == "ok") {
-    //     if (cachedQuantity == -1) {
-    //       setCachedQuantity(parseInt(stock) + parseInt(quantity));
-    //     } else {
-    //       setCachedQuantity(cachedQuantity + parseInt(quantity));
-    //     }
-    //   }
-    // });
+    const { data } = await updateStock({
+      where: {
+        id,
+      },
+      set: {
+        stock: parseInt(quantity),
+      },
+    });
+
+    if (data) {
+      setCachedQuantity(data.updateStockOption.stock);
+    }
     handleClose();
   };
 
@@ -203,6 +213,11 @@ const OptionItem: React.FC<Pick<Option, "id" | "name" | "image" | "price" | "sto
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           {cachedQuantity == -1 ? <Box>{stock}</Box> : cachedQuantity}
+          {stock < 10 && cachedQuantity < 10 && (
+            <Tooltip title="もうすぐなくなる">
+              <WarningTwoToneIcon style={{ color: red[400] }} />
+            </Tooltip>
+          )}
         </Box>
       </TableCell>
       <TableCell className={classes.tableCell}>

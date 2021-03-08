@@ -134,8 +134,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   createFlavor: Flavor;
   deleteFlavor: Flavor;
+  updateStockFlavor: Flavor;
   createOption: Option;
   deleteOption: Option;
+  updateStockOption: Option;
   createProduct: Product;
   deleteProduct: Product;
   createReceipt: Receipt;
@@ -157,6 +159,12 @@ export type MutationDeleteFlavorArgs = {
 };
 
 
+export type MutationUpdateStockFlavorArgs = {
+  where: WhereUniqueInput;
+  set: SetStockInput;
+};
+
+
 export type MutationCreateOptionArgs = {
   image: Scalars['Upload'];
   data: CreateOptionInput;
@@ -165,6 +173,12 @@ export type MutationCreateOptionArgs = {
 
 export type MutationDeleteOptionArgs = {
   where: WhereUniqueInput;
+};
+
+
+export type MutationUpdateStockOptionArgs = {
+  where: WhereUniqueInput;
+  set: SetStockInput;
 };
 
 
@@ -209,6 +223,10 @@ export type MutationUpdateUserArgs = {
 export type CreateFlavorInput = {
   name: Scalars['String'];
   stockPrice: Scalars['Float'];
+};
+
+export type SetStockInput = {
+  stock: Scalars['Float'];
 };
 
 export type CreateOptionInput = {
@@ -265,6 +283,33 @@ export type UpdateUserInput = {
   isAdmin: Scalars['Boolean'];
 };
 
+export type DeleteFlavorMutationVariables = Exact<{
+  where: WhereUniqueInput;
+}>;
+
+
+export type DeleteFlavorMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteFlavor: (
+    { __typename?: 'Flavor' }
+    & Pick<Flavor, 'id'>
+  ) }
+);
+
+export type UpdateStockFlavorMutationVariables = Exact<{
+  set: SetStockInput;
+  where: WhereUniqueInput;
+}>;
+
+
+export type UpdateStockFlavorMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStockFlavor: (
+    { __typename?: 'Flavor' }
+    & Pick<Flavor, 'id' | 'stock'>
+  ) }
+);
+
 export type FlavorsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -274,6 +319,33 @@ export type FlavorsQuery = (
     { __typename?: 'Flavor' }
     & Pick<Flavor, 'id' | 'name' | 'image' | 'stock' | 'stockPrice'>
   )>> }
+);
+
+export type DeleteOptionMutationVariables = Exact<{
+  where: WhereUniqueInput;
+}>;
+
+
+export type DeleteOptionMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteOption: (
+    { __typename?: 'Option' }
+    & Pick<Option, 'id'>
+  ) }
+);
+
+export type UpdateStockOptionMutationVariables = Exact<{
+  set: SetStockInput;
+  where: WhereUniqueInput;
+}>;
+
+
+export type UpdateStockOptionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStockOption: (
+    { __typename?: 'Option' }
+    & Pick<Option, 'id' | 'stock'>
+  ) }
 );
 
 export type OptionsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -350,6 +422,29 @@ export type LoginMutation = (
 );
 
 
+export const DeleteFlavorDocument = gql`
+    mutation DeleteFlavor($where: WhereUniqueInput!) {
+  deleteFlavor(where: $where) {
+    id
+  }
+}
+    `;
+
+export function useDeleteFlavorMutation() {
+  return Urql.useMutation<DeleteFlavorMutation, DeleteFlavorMutationVariables>(DeleteFlavorDocument);
+};
+export const UpdateStockFlavorDocument = gql`
+    mutation UpdateStockFlavor($set: SetStockInput!, $where: WhereUniqueInput!) {
+  updateStockFlavor(set: $set, where: $where) {
+    id
+    stock
+  }
+}
+    `;
+
+export function useUpdateStockFlavorMutation() {
+  return Urql.useMutation<UpdateStockFlavorMutation, UpdateStockFlavorMutationVariables>(UpdateStockFlavorDocument);
+};
 export const FlavorsDocument = gql`
     query Flavors {
   flavors {
@@ -364,6 +459,29 @@ export const FlavorsDocument = gql`
 
 export function useFlavorsQuery(options: Omit<Urql.UseQueryArgs<FlavorsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<FlavorsQuery>({ query: FlavorsDocument, ...options });
+};
+export const DeleteOptionDocument = gql`
+    mutation DeleteOption($where: WhereUniqueInput!) {
+  deleteOption(where: $where) {
+    id
+  }
+}
+    `;
+
+export function useDeleteOptionMutation() {
+  return Urql.useMutation<DeleteOptionMutation, DeleteOptionMutationVariables>(DeleteOptionDocument);
+};
+export const UpdateStockOptionDocument = gql`
+    mutation UpdateStockOption($set: SetStockInput!, $where: WhereUniqueInput!) {
+  updateStockOption(set: $set, where: $where) {
+    id
+    stock
+  }
+}
+    `;
+
+export function useUpdateStockOptionMutation() {
+  return Urql.useMutation<UpdateStockOptionMutation, UpdateStockOptionMutationVariables>(UpdateStockOptionDocument);
 };
 export const OptionsDocument = gql`
     query Options {
