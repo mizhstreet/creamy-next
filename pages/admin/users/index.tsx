@@ -1,29 +1,27 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Grid,
   makeStyles,
-  Slide,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@material-ui/core";
 
 import { blue, grey, red } from "@material-ui/core/colors";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import PersonAddTwoToneIcon from "@material-ui/icons/PersonAddTwoTone";
 import { SectionTitle } from "../../../components/typography/section-title";
-import { TransitionProps } from "@material-ui/core/transitions/transition";
 import { Page } from "../../../components/page";
 
-import { IUser } from "../../../interfaces/user";
 import { User } from "../../../components/admin/user/user";
-import { getEndpoint } from "../../../utils/getEndpoint";
+import { useUsersQuery } from "../../../generated/apolloComponent";
+import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
   img: {
@@ -115,43 +113,36 @@ const useStyles = makeStyles({
   tableHead: {},
 });
 
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & { children?: React.ReactElement<any, any> },
-  ref: React.Ref<unknown>,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 const UsersPage: React.FC = () => {
   const classes = useStyles();
 
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [result] = useUsersQuery();
 
-  const loadUsers = useCallback(() => {
-    axios.get<IUser[]>(getEndpoint("/api/user/all")).then((response) => {
-      setUsers(response.data);
-    });
-  }, []);
+  const { data, fetching, error } = result;
 
-  useEffect(() => {
-    loadUsers();
-  }, [loadUsers]);
+  if (fetching) {
+    return <CircularProgress />;
+  }
 
+  if (error) {
+    console.warn(error);
+  }
   return (
-    <Page title={"レジ"}>
+    <Page title={"ユーザー管理"}>
       <Grid container>
         <Box width={1} pl={5} pr={5}>
           <Box width={1} display="flex" justifyContent="space-between" alignItems="center">
             <SectionTitle component="h2">ユーザー</SectionTitle>
-            <Button
-              href="/web/admin/user/create"
-              disableElevation
-              variant="contained"
-              className={classes.newBtn}
-              startIcon={<PersonAddTwoToneIcon className={classes.icon} />}
-            >
-              登録
-            </Button>
+            <Link href="/admin/users/create-user" passHref>
+              <Button
+                disableElevation
+                variant="contained"
+                className={classes.newBtn}
+                startIcon={<PersonAddTwoToneIcon className={classes.icon} />}
+              >
+                登録
+              </Button>
+            </Link>
           </Box>
           <Grid style={{ height: 1000 }} item md={12}>
             <TableContainer className={classes.tableContainer}>
@@ -165,9 +156,10 @@ const UsersPage: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users.map((u) => (
-                    <User key={u.userid} name={u.name} isAdmin={u.isAdmin} userid={u.userid} image={u.image} />
-                  ))}
+                  {data?.users &&
+                    data?.users.map((u) => (
+                      <User key={u.id} name={u.name} isAdmin={u.isAdmin} id={u.id} image={getImage(u.image)} />
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>

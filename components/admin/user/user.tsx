@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import { blue, grey, red } from "@material-ui/core/colors";
-
-import { getImage } from "../../../utils/getImage";
+import { useDeleteUserMutation, User as TUser } from "../../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   img: {
@@ -96,19 +95,14 @@ const useStyles = makeStyles({
   tableHead: {},
 });
 
-interface IProps {
-  userid: string;
-  name: string;
-  isAdmin: boolean;
-  image: string;
-}
-
-const User: React.FC<IProps> = ({ userid, name, isAdmin, image }) => {
+const User: React.FC<Pick<TUser, "id" | "name" | "isAdmin" | "image">> = ({ id, name, isAdmin, image }) => {
   const classes = useStyles();
 
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
   const [open, setOpen] = React.useState<boolean>(false);
+
+  const [result, deleteUser] = useDeleteUserMutation();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -119,21 +113,25 @@ const User: React.FC<IProps> = ({ userid, name, isAdmin, image }) => {
   };
 
   const handleDelete = async () => {
-    await axios.post("/web/api/user/delete", { userid }).then((response) => {
-      if (response.data == "ok") {
-        setIsDeleted(true);
-      }
+    const { data } = await deleteUser({
+      where: {
+        id,
+      },
     });
+
+    if (data) {
+      setIsDeleted(true);
+    }
     handleClose();
   };
 
   return !isDeleted ? (
     <TableRow>
-      <TableCell className={classes.tableCell}>#{userid}</TableCell>
+      <TableCell className={classes.tableCell}>#{id}</TableCell>
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           <Box maxWidth={60}>
-            <img className={classes.img} src={getImage(image)} />
+            <img className={classes.img} src={image} />
           </Box>
           <Typography className={classes.name}>{name}</Typography>
         </Box>

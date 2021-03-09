@@ -408,6 +408,19 @@ export type ReceiptQuery = (
   )> }
 );
 
+export type DeleteUserMutationVariables = Exact<{
+  where: WhereUniqueInput;
+}>;
+
+
+export type DeleteUserMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteUser: (
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  ) }
+);
+
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
 }>;
@@ -419,6 +432,17 @@ export type LoginMutation = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'name' | 'image'>
   ) }
+);
+
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = (
+  { __typename?: 'Query' }
+  & { users?: Maybe<Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'name' | 'image' | 'isAdmin'>
+  )>> }
 );
 
 
@@ -561,6 +585,17 @@ export const ReceiptDocument = gql`
 export function useReceiptQuery(options: Omit<Urql.UseQueryArgs<ReceiptQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ReceiptQuery>({ query: ReceiptDocument, ...options });
 };
+export const DeleteUserDocument = gql`
+    mutation DeleteUser($where: WhereUniqueInput!) {
+  deleteUser(where: $where) {
+    id
+  }
+}
+    `;
+
+export function useDeleteUserMutation() {
+  return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument);
+};
 export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
   login(data: $data) {
@@ -573,4 +608,18 @@ export const LoginDocument = gql`
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const UsersDocument = gql`
+    query Users {
+  users {
+    id
+    name
+    image
+    isAdmin
+  }
+}
+    `;
+
+export function useUsersQuery(options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
 };
