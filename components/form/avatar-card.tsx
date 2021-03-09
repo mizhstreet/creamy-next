@@ -2,10 +2,11 @@ import { Box, Button, makeStyles, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import PublishTwoToneIcon from "@material-ui/icons/PublishTwoTone";
 import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
-import React from "react";
+import React, { useState } from "react";
 
 interface IProps {
   empty?: boolean;
+  onFileSelect: (e: File | undefined) => void;
 }
 
 const useStyles = makeStyles({
@@ -33,16 +34,25 @@ const useStyles = makeStyles({
   btn: {
     fontWeight: "bolder",
   },
+  input: {
+    display: "none",
+  },
+  labelCtn: {
+    display: "flex",
+    alignItems: "center",
+  },
 });
 
-const AvatarCard: React.FC<IProps> = ({ empty = true }) => {
+const AvatarCard: React.FC<IProps> = ({ empty = false, onFileSelect }) => {
   const classes = useStyles();
+
+  const [file, setFile] = useState<File | undefined>();
   return (
     <Box className={classes.container} width={1} p={3} display="flex" justifyContent="space-between">
       <Box display="flex" alignItems="center">
         <Box maxWidth={60}>
           {!empty ? (
-            <img className={classes.img} src="/images/zayn.jpg" alt="" />
+            <img className={classes.img} src={file ? URL.createObjectURL(file) : undefined} alt="" />
           ) : (
             <AccountCircleTwoToneIcon style={{ fontSize: 50 }} />
           )}
@@ -64,9 +74,23 @@ const AvatarCard: React.FC<IProps> = ({ empty = true }) => {
           )}
         </Box>
       </Box>
-      <Button className={classes.btn} startIcon={<PublishTwoToneIcon />}>
-        アップロード
-      </Button>
+      <input
+        onChange={(e) => {
+          if (e.target.files) {
+            onFileSelect(e.target.files[0]);
+          }
+        }}
+        accept="image/*"
+        className={classes.input}
+        id="imageme"
+        multiple
+        type="file"
+      />
+      <label className={classes.labelCtn} htmlFor="imageme">
+        <Button component="span" className={classes.btn} startIcon={<PublishTwoToneIcon />}>
+          アップロード
+        </Button>
+      </label>
     </Box>
   );
 };

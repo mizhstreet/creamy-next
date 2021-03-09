@@ -2,12 +2,13 @@ import { Box, Button, Grid, InputLabel, makeStyles } from "@material-ui/core";
 import { blue, grey } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
 import { Switch } from "formik-material-ui";
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { AvatarCard } from "../../../components/form/avatar-card";
 import { OutlinedTextfield } from "../../../components/form/outlined-textfield";
 import { Page } from "../../../components/page";
 import { SectionTitle } from "../../../components/typography/section-title";
+import { useCreateUserMutation } from "../../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   applyBtn: {
@@ -54,6 +55,11 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
 const CreateUserPage: React.FC = () => {
   const classes = useStyles();
 
+  const [file, setFile] = useState<File | undefined>();
+  console.log(file);
+
+  const [result, createUser] = useCreateUserMutation();
+
   const initialValues: IFormValues = {
     username: "",
     password: "",
@@ -68,14 +74,24 @@ const CreateUserPage: React.FC = () => {
           <SectionTitle component="h2">ユーザー新規登録</SectionTitle>
         </Box>
         <Grid item md={8} lg={6}>
-          <AvatarCard />
+          <AvatarCard onFileSelect={(e) => setFile(e)} />
           <Box mt={10}>
             <Formik
               validationSchema={DisplayingErrorMessagesSchema}
               initialValues={initialValues}
-              onSubmit={async (values, { setSubmitting }) => {
-                console.log("something");
+              onSubmit={async ({ name, username, password, isAdmin }, { setSubmitting }) => {
                 setSubmitting(true);
+                console.log("submitting");
+                const { data } = await createUser({
+                  data: {
+                    name,
+                    username,
+                    password,
+                    isAdmin,
+                  },
+                  image: file,
+                });
+                console.log(data);
               }}
             >
               {() => (
@@ -103,7 +119,12 @@ const CreateUserPage: React.FC = () => {
                       <Field component={Switch} type="checkbox" name="isAdmin" />
                       <label className={classes.switchLabel}>管理者</label>
                     </Box>
-                    <Button disableElevation variant="contained" classes={{ contained: classes.applyBtn }}>
+                    <Button
+                      type="submit"
+                      disableElevation
+                      variant="contained"
+                      classes={{ contained: classes.applyBtn }}
+                    >
                       保存
                     </Button>
                   </Box>

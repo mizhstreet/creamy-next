@@ -408,6 +408,20 @@ export type ReceiptQuery = (
   )> }
 );
 
+export type CreateUserMutationVariables = Exact<{
+  data: CreateUserInput;
+  image: Scalars['Upload'];
+}>;
+
+
+export type CreateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { createUser: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'name' | 'image'>
+  ) }
+);
+
 export type DeleteUserMutationVariables = Exact<{
   where: WhereUniqueInput;
 }>;
@@ -584,6 +598,19 @@ export const ReceiptDocument = gql`
 
 export function useReceiptQuery(options: Omit<Urql.UseQueryArgs<ReceiptQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ReceiptQuery>({ query: ReceiptDocument, ...options });
+};
+export const CreateUserDocument = gql`
+    mutation CreateUser($data: CreateUserInput!, $image: Upload!) {
+  createUser(data: $data, image: $image) {
+    id
+    name
+    image
+  }
+}
+    `;
+
+export function useCreateUserMutation() {
+  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
 };
 export const DeleteUserDocument = gql`
     mutation DeleteUser($where: WhereUniqueInput!) {
