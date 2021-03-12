@@ -82,15 +82,11 @@ const CreateOptionPage: React.FC = () => {
                 <Form>
                   <Box width={1}>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        フレーバー名
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>フレーバー名</InputLabel>
                       <Field component={OutlinedTextfield} name="name" />
                     </Box>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        入庫値段
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>入庫値段</InputLabel>
                       <Field component={OutlinedTextfield} name="password" />
                     </Box>
                     <Button disableElevation variant="contained" classes={{ contained: classes.applyBtn }}>

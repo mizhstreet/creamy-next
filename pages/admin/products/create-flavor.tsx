@@ -59,9 +59,9 @@ const CreateOptionPage: React.FC = () => {
 
   const [file, setFile] = useState<File | undefined>();
 
-  const [result, createFlavor] = useCreateFlavorMutation();
-
   const [openSnack, setOpenSnack] = React.useState<boolean>(false);
+
+  const [result, createFlavor] = useCreateFlavorMutation();
 
   const initialValues: IFormValues = {
     name: "",
@@ -107,15 +107,11 @@ const CreateOptionPage: React.FC = () => {
                   <Loading open={isSubmitting} />
                   <Box width={1}>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        フレーバー名
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>フレーバー名</InputLabel>
                       <Field component={OutlinedTextfield} name="name" />
                     </Box>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        入庫値段
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>入庫値段</InputLabel>
                       <Field type="number" component={OutlinedTextfield} name="stockPrice" />
                     </Box>
                     <Button

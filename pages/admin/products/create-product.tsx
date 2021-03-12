@@ -83,27 +83,19 @@ const CreateProductPage: React.FC = () => {
                 <Form>
                   <Box width={1}>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        商品名
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>商品名</InputLabel>
                       <Field component={OutlinedTextfield} name="name" />
                     </Box>
                     <Box>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        ベース値段
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>ベース値段</InputLabel>
                       <Field component={OutlinedTextfield} name="username" />
                     </Box>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        フレーバー数
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>フレーバー数</InputLabel>
                       <Field component={OutlinedTextfield} name="password" />
                     </Box>
                     <Box>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        サイズ
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>サイズ</InputLabel>
                       <Box>
                         <Chip clickable color="primary" label="キング" />
                         <Chip clickable color="primary" label="スモール" />

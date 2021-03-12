@@ -110,21 +110,15 @@ const CreateUserPage: React.FC = () => {
                   <Loading open={isSubmitting} />
                   <Box width={1}>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        名前
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>名前</InputLabel>
                       <Field component={OutlinedTextfield} name="name" />
                     </Box>
                     <Box>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        ログインID
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>ログインID</InputLabel>
                       <Field component={OutlinedTextfield} name="username" />
                     </Box>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
-                        パスワード
-                      </InputLabel>
+                      <InputLabel className={classes.inputLabel}>パスワード</InputLabel>
                       <Field type="password" component={OutlinedTextfield} name="password" />
                     </Box>
                     <Box display="flex" alignItems="center">

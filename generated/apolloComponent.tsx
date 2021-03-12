@@ -335,6 +335,20 @@ export type FlavorsQuery = (
   )>> }
 );
 
+export type CreateOptionMutationVariables = Exact<{
+  data: CreateOptionInput;
+  image: Scalars['Upload'];
+}>;
+
+
+export type CreateOptionMutation = (
+  { __typename?: 'Mutation' }
+  & { createOption: (
+    { __typename?: 'Option' }
+    & Pick<Option, 'id' | 'name'>
+  ) }
+);
+
 export type DeleteOptionMutationVariables = Exact<{
   where: WhereUniqueInput;
 }>;
@@ -523,6 +537,18 @@ export const FlavorsDocument = gql`
 
 export function useFlavorsQuery(options: Omit<Urql.UseQueryArgs<FlavorsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<FlavorsQuery>({ query: FlavorsDocument, ...options });
+};
+export const CreateOptionDocument = gql`
+    mutation CreateOption($data: CreateOptionInput!, $image: Upload!) {
+  createOption(data: $data, image: $image) {
+    id
+    name
+  }
+}
+    `;
+
+export function useCreateOptionMutation() {
+  return Urql.useMutation<CreateOptionMutation, CreateOptionMutationVariables>(CreateOptionDocument);
 };
 export const DeleteOptionDocument = gql`
     mutation DeleteOption($where: WhereUniqueInput!) {

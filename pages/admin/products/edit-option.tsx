@@ -83,19 +83,19 @@ const EditOptionPage: React.FC = () => {
                 <Form>
                   <Box width={1}>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
+                      <InputLabel className={classes.inputLabel} >
                         容器名
                       </InputLabel>
                       <Field component={OutlinedTextfield} name="name" />
                     </Box>
                     <Box>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
+                      <InputLabel className={classes.inputLabel} >
                         値段
                       </InputLabel>
                       <Field component={OutlinedTextfield} name="username" />
                     </Box>
                     <Box width={1}>
-                      <InputLabel className={classes.inputLabel} htmlFor="email">
+                      <InputLabel className={classes.inputLabel} >
                         入庫値段
                       </InputLabel>
                       <Field component={OutlinedTextfield} name="password" />
