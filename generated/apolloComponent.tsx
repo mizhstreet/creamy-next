@@ -283,6 +283,20 @@ export type UpdateUserInput = {
   isAdmin: Scalars['Boolean'];
 };
 
+export type CreateFlavorMutationVariables = Exact<{
+  image: Scalars['Upload'];
+  data: CreateFlavorInput;
+}>;
+
+
+export type CreateFlavorMutation = (
+  { __typename?: 'Mutation' }
+  & { createFlavor: (
+    { __typename?: 'Flavor' }
+    & Pick<Flavor, 'id' | 'name'>
+  ) }
+);
+
 export type DeleteFlavorMutationVariables = Exact<{
   where: WhereUniqueInput;
 }>;
@@ -460,6 +474,18 @@ export type UsersQuery = (
 );
 
 
+export const CreateFlavorDocument = gql`
+    mutation CreateFlavor($image: Upload!, $data: CreateFlavorInput!) {
+  createFlavor(data: $data, image: $image) {
+    id
+    name
+  }
+}
+    `;
+
+export function useCreateFlavorMutation() {
+  return Urql.useMutation<CreateFlavorMutation, CreateFlavorMutationVariables>(CreateFlavorDocument);
+};
 export const DeleteFlavorDocument = gql`
     mutation DeleteFlavor($where: WhereUniqueInput!) {
   deleteFlavor(where: $where) {
