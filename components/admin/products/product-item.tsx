@@ -1,9 +1,9 @@
-import { Box, Button, Chip, makeStyles, TableCell, TableRow, Typography } from "@material-ui/core";
-import React from "react";
+import { Box, Button, Chip, Dialog, DialogTitle, makeStyles, TableCell, TableRow, Typography } from "@material-ui/core";
+import React, { useState } from "react";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import { blue, green, grey, red } from "@material-ui/core/colors";
-import { Product, Size } from "../../../generated/apolloComponent";
+import { Product, Size, useDeleteProductMutation } from "../../../generated/apolloComponent";
 
 const useStyles = makeStyles({
   img: {
@@ -111,7 +111,36 @@ type TSize = Omit<Size, "created" | "updated" | "deletedAt">;
 
 const ProductItem: React.FC<TProduct & { sizes: TSize[] }> = ({ id, name, basePrice, sizes, image }) => {
   const classes = useStyles();
-  return (
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+
+  const [result, deleteProduct] = useDeleteProductMutation();
+
+  const handleDeleteOpen = () => {
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
+  };
+
+  const handleDelete = async () => {
+    const { data } = await deleteProduct({
+      where: {
+        id,
+      },
+    });
+
+    if (data) {
+      setIsDeleted(true);
+    }
+
+    handleDeleteClose();
+  };
+
+  return !isDeleted ? (
     <TableRow>
       <TableCell className={classes.tableCell}>#{id}</TableCell>
       <TableCell className={classes.tableCell}>
@@ -135,12 +164,24 @@ const ProductItem: React.FC<TProduct & { sizes: TSize[] }> = ({ id, name, basePr
         <Button disableElevation className={classes.editBtn} variant="contained">
           <EditTwoToneIcon className={classes.icon} />
         </Button>
-        <Button disableElevation className={classes.deleteBtn} variant="contained">
+        <Button onClick={handleDeleteOpen} disableElevation className={classes.deleteBtn} variant="contained">
           <DeleteTwoToneIcon className={classes.icon} />
         </Button>
       </TableCell>
+      <Dialog
+        open={deleteOpen}
+        keepMounted
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">本当に削除しますか？</DialogTitle>
+        <Button onClick={handleDelete} color="secondary">
+          削除
+        </Button>
+      </Dialog>
     </TableRow>
-  );
+  ) : null;
 };
 
 export { ProductItem };

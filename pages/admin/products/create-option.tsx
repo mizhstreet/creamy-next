@@ -130,7 +130,7 @@ const CreateOptionPage: React.FC = () => {
                       保存
                     </Button>
                   </Box>
-                  <SnackAlert open={openSnack} message={"フレーバー登録済み！"} />
+                  <SnackAlert open={openSnack} message={"容器登録済み！"} />
                 </Form>
               )}
             </Formik>

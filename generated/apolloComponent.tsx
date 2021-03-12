@@ -387,6 +387,33 @@ export type OptionsQuery = (
   )>> }
 );
 
+export type CreateProductMutationVariables = Exact<{
+  data: CreateProductInput;
+  image: Scalars['Upload'];
+}>;
+
+
+export type CreateProductMutation = (
+  { __typename?: 'Mutation' }
+  & { createProduct: (
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name'>
+  ) }
+);
+
+export type DeleteProductMutationVariables = Exact<{
+  where: WhereUniqueInput;
+}>;
+
+
+export type DeleteProductMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteProduct: (
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+  ) }
+);
+
 export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -588,6 +615,29 @@ export const OptionsDocument = gql`
 
 export function useOptionsQuery(options: Omit<Urql.UseQueryArgs<OptionsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<OptionsQuery>({ query: OptionsDocument, ...options });
+};
+export const CreateProductDocument = gql`
+    mutation CreateProduct($data: CreateProductInput!, $image: Upload!) {
+  createProduct(data: $data, image: $image) {
+    id
+    name
+  }
+}
+    `;
+
+export function useCreateProductMutation() {
+  return Urql.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument);
+};
+export const DeleteProductDocument = gql`
+    mutation DeleteProduct($where: WhereUniqueInput!) {
+  deleteProduct(where: $where) {
+    id
+  }
+}
+    `;
+
+export function useDeleteProductMutation() {
+  return Urql.useMutation<DeleteProductMutation, DeleteProductMutationVariables>(DeleteProductDocument);
 };
 export const ProductsDocument = gql`
     query Products {
