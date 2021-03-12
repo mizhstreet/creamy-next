@@ -1,12 +1,12 @@
 import { Box, Button, makeStyles, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import PublishTwoToneIcon from "@material-ui/icons/PublishTwoTone";
-import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
-import React, { useState } from "react";
+import ImageTwoToneIcon from "@material-ui/icons/ImageTwoTone";
+import React from "react";
 
 interface IProps {
-  empty?: boolean;
   onFileSelect: (e: File | undefined) => void;
+  file?: File;
 }
 
 const useStyles = makeStyles({
@@ -43,35 +43,25 @@ const useStyles = makeStyles({
   },
 });
 
-const AvatarCard: React.FC<IProps> = ({ empty = false, onFileSelect }) => {
+const AvatarCard: React.FC<IProps> = ({ onFileSelect, file }) => {
   const classes = useStyles();
 
-  const [file, setFile] = useState<File | undefined>();
   return (
     <Box className={classes.container} width={1} p={3} display="flex" justifyContent="space-between">
       <Box display="flex" alignItems="center">
         <Box maxWidth={60}>
-          {!empty ? (
-            <img className={classes.img} src={file ? URL.createObjectURL(file) : undefined} alt="" />
+          {file ? (
+            <img className={classes.img} src={URL.createObjectURL(file)} alt="" />
           ) : (
-            <AccountCircleTwoToneIcon style={{ fontSize: 50 }} />
+            <ImageTwoToneIcon style={{ fontSize: 50 }} />
           )}
         </Box>
         <Box ml={2}>
-          {!empty ? (
-            <Box>
-              <Typography className={classes.name}>Minh Biu</Typography>
-              <Typography className={classes.description} component="span">
-                写真を載せてください
-              </Typography>
-            </Box>
-          ) : (
-            <Box>
-              <Typography className={classes.descriptionEmpty} component="span">
-                写真を載せてください
-              </Typography>
-            </Box>
-          )}
+          <Box>
+            <Typography className={classes.descriptionEmpty} component="span">
+              写真を載せてください
+            </Typography>
+          </Box>
         </Box>
       </Box>
       <input

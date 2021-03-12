@@ -1,8 +1,7 @@
-import { Box, Button, Grid, InputLabel, makeStyles, Snackbar } from "@material-ui/core";
+import { Box, Button, Grid, InputLabel, makeStyles } from "@material-ui/core";
 import { blue, grey } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
 import { Switch } from "formik-material-ui";
-import next from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as Yup from "yup";
@@ -81,7 +80,7 @@ const CreateUserPage: React.FC = () => {
           <SectionTitle component="h2">ユーザー新規登録</SectionTitle>
         </Box>
         <Grid item md={8} lg={6}>
-          <AvatarCard onFileSelect={(e) => setFile(e)} />
+          <AvatarCard file={file} onFileSelect={(e) => setFile(e)} />
           <Box mt={10}>
             <Formik
               validationSchema={DisplayingErrorMessagesSchema}
