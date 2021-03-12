@@ -1,12 +1,16 @@
-import { Box, Button, Grid, InputLabel, makeStyles } from "@material-ui/core";
+import { Box, Button, Grid, InputLabel, makeStyles, Snackbar } from "@material-ui/core";
 import { blue, grey } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
 import { Switch } from "formik-material-ui";
+import next from "next";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { AvatarCard } from "../../../components/form/avatar-card";
 import { OutlinedTextfield } from "../../../components/form/outlined-textfield";
+import { Loading } from "../../../components/loading";
 import { Page } from "../../../components/page";
+import { SnackAlert } from "../../../components/snack-alert";
 import { SectionTitle } from "../../../components/typography/section-title";
 import { useCreateUserMutation } from "../../../generated/apolloComponent";
 
@@ -56,14 +60,17 @@ const CreateUserPage: React.FC = () => {
   const classes = useStyles();
 
   const [file, setFile] = useState<File | undefined>();
-  console.log(file);
 
   const [result, createUser] = useCreateUserMutation();
+
+  const [openSnack, setOpenSnack] = React.useState<boolean>(false);
+
+  const router = useRouter();
 
   const initialValues: IFormValues = {
     username: "",
     password: "",
-    isAdmin: true,
+    isAdmin: false,
     name: "",
   };
 
@@ -81,7 +88,6 @@ const CreateUserPage: React.FC = () => {
               initialValues={initialValues}
               onSubmit={async ({ name, username, password, isAdmin }, { setSubmitting }) => {
                 setSubmitting(true);
-                console.log("submitting");
                 const { data } = await createUser({
                   data: {
                     name,
@@ -91,11 +97,18 @@ const CreateUserPage: React.FC = () => {
                   },
                   image: file,
                 });
-                console.log(data);
+                if (data) {
+                  setSubmitting(false);
+                  setOpenSnack(true);
+                  setTimeout(() => {
+                    router.push("/admin/users");
+                  }, 1000);
+                }
               }}
             >
-              {() => (
+              {({ isSubmitting }) => (
                 <Form>
+                  <Loading open={isSubmitting} />
                   <Box width={1}>
                     <Box width={1}>
                       <InputLabel className={classes.inputLabel} htmlFor="email">
@@ -128,6 +141,7 @@ const CreateUserPage: React.FC = () => {
                       保存
                     </Button>
                   </Box>
+                  <SnackAlert open={openSnack} message={"ユーザー登録済み！"} />
                 </Form>
               )}
             </Formik>

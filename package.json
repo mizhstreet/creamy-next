@@ -27,6 +27,7 @@
     "react": "17.0.1",
     "react-chartjs-2": "^2.11.1",
     "react-dom": "17.0.1",
+    "react-spinners": "^0.10.6",
     "unstated-next": "^1.1.0",
     "urql": "^2.0.1",
     "yup": "^0.32.8"
