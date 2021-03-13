@@ -14,17 +14,6 @@ const useStyles = makeStyles({
     paddingLeft: 20,
     fontWeight: "bolder",
   },
-  icon: {
-    fontSize: 22,
-  },
-  btn: {
-    maxWidth: "40px",
-    maxHeight: "40px",
-    minWidth: "40px",
-    minHeight: "40px",
-    marginLeft: 4,
-    marginRight: 4,
-  },
   editBtn: {
     maxWidth: "120px",
     paddingTop: 10,
@@ -41,36 +30,11 @@ const useStyles = makeStyles({
       backgroundColor: blue[400],
     },
   },
-  newBtn: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderRadius: 10,
-    color: blue[800],
-    fontWeight: "bold",
-    fontSize: 16,
-    backgroundColor: blue[100],
-    "&:hover": {
-      backgroundColor: blue[100],
-    },
-  },
-  tableContainer: {},
-  table: {
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  tableHeadline: {
-    fontWeight: "bold",
-    fontSize: 20,
-    color: grey[800],
-    backgroundColor: grey[100],
-    border: "none",
-  },
   tableCell: {
     borderBottom: "1px solid",
     borderBottomColor: grey[200],
     fontSize: 18,
   },
-  tableHead: {},
 });
 
 type TUser = Pick<User, "image" | "name">;

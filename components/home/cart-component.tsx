@@ -2,7 +2,6 @@ import { Box, Button, Divider, Grid, makeStyles, Typography } from "@material-ui
 import { grey, pink, red } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
 import React from "react";
-import * as Yup from "yup";
 import { SectionTitle } from "../typography/section-title";
 import { Order } from "./order";
 import { SubSectionTitle } from "../typography/sub-section-title";
@@ -66,10 +65,6 @@ const useStyles = makeStyles({
   },
 });
 
-const DisplayingErrorMessagesSchema = Yup.object().shape({
-  cash: Yup.number().min(1000, "たりないです"),
-});
-
 const CartComponent: React.FC = () => {
   const classes = useStyles();
 
@@ -100,7 +95,13 @@ const CartComponent: React.FC = () => {
             <SubSectionTitle>受取金額</SubSectionTitle>
             <Formik
               initialValues={initialValues}
-              validationSchema={DisplayingErrorMessagesSchema}
+              validate={(values) => {
+                const errors = {} as any;
+                if (values.cash < container.getTotal()) {
+                  errors.cash = "たりないです。";
+                }
+                return errors;
+              }}
               onSubmit={async (values, { setSubmitting }) => {
                 setSubmitting(true);
                 const myData = {

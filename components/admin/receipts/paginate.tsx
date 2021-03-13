@@ -26,7 +26,7 @@ const Paginate: React.FC<IProps> = ({ page, handlePageChange }) => {
       <Pagination
         page={page}
         onChange={handlePageChange}
-        count={data?.totalReceipt ? Math.floor(data?.totalReceipt / 10) : 1}
+        count={data?.totalReceipt ? Math.ceil(data?.totalReceipt / 10) : 1}
         color="primary"
       />
     </Box>
