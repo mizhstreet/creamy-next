@@ -2,8 +2,7 @@ import { Box, Button, makeStyles, TableCell, TableRow, Typography } from "@mater
 import { blue, grey } from "@material-ui/core/colors";
 import Link from "next/link";
 import React from "react";
-import { IReceipt } from "../../../interfaces/receipt";
-import { IUser } from "../../../interfaces/user";
+import { Receipt, User } from "../../../generated/apolloComponent";
 import { getImage } from "../../../utils/getImage";
 
 const useStyles = makeStyles({
@@ -74,24 +73,28 @@ const useStyles = makeStyles({
   tableHead: {},
 });
 
-const ReceiptItem: React.FC<IUser & IReceipt> = ({ receiptid, image, name, created_at, total }) => {
+type TUser = Pick<User, "image" | "name">;
+
+const ReceiptItem: React.FC<
+  Pick<Receipt, "created" | "cash" | "id" | "total"> & { user: TUser | null | undefined }
+> = ({ created, cash, id, total, user }) => {
   const classes = useStyles();
   return (
     <TableRow>
-      <TableCell className={classes.tableCell}>#{receiptid}</TableCell>
+      <TableCell className={classes.tableCell}>#{id}</TableCell>
       <TableCell className={classes.tableCell}>
         <Box width={1} display="flex" alignItems="center">
           <Box maxWidth={60}>
-            <img className={classes.img} src={getImage(image)} />
+            <img className={classes.img} src={getImage(user ? user.image : "")} />
           </Box>
-          <Typography className={classes.name}>{name}</Typography>
+          <Typography className={classes.name}>{user ? user.name : ""}</Typography>
         </Box>
       </TableCell>
-      <TableCell className={classes.tableCell}>{created_at}</TableCell>
+      <TableCell className={classes.tableCell}>{created}</TableCell>
       <TableCell className={classes.tableCell}>{total}円</TableCell>
 
       <TableCell className={classes.tableCell}>
-        <Link href={`/admin/receipts/detail?id=${receiptid}`} passHref>
+        <Link href={`/admin/receipt/${id}`} passHref>
           <Button disableElevation className={classes.editBtn} variant="contained">
             詳細を見る
           </Button>

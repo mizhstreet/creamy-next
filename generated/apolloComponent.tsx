@@ -26,11 +26,18 @@ export type Query = {
   receipt?: Maybe<Receipt>;
   receipts?: Maybe<Array<Receipt>>;
   users?: Maybe<Array<User>>;
+  totalReceipt?: Maybe<Scalars['Int']>;
 };
 
 
 export type QueryReceiptArgs = {
   where: WhereUniqueInput;
+};
+
+
+export type QueryReceiptsArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
 };
 
 export type Flavor = {
@@ -463,6 +470,32 @@ export type ReceiptQuery = (
   )> }
 );
 
+export type ReceiptsQueryVariables = Exact<{
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type ReceiptsQuery = (
+  { __typename?: 'Query' }
+  & { receipts?: Maybe<Array<(
+    { __typename?: 'Receipt' }
+    & Pick<Receipt, 'id' | 'cash' | 'total' | 'created'>
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'image' | 'name'>
+    )> }
+  )>> }
+);
+
+export type TotalReceiptQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TotalReceiptQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'totalReceipt'>
+);
+
 export type CreateUserMutationVariables = Exact<{
   data: CreateUserInput;
   image: Scalars['Upload'];
@@ -700,6 +733,33 @@ export const ReceiptDocument = gql`
 
 export function useReceiptQuery(options: Omit<Urql.UseQueryArgs<ReceiptQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ReceiptQuery>({ query: ReceiptDocument, ...options });
+};
+export const ReceiptsDocument = gql`
+    query Receipts($skip: Int, $take: Int) {
+  receipts(skip: $skip, take: $take) {
+    id
+    cash
+    total
+    created
+    user {
+      image
+      name
+    }
+  }
+}
+    `;
+
+export function useReceiptsQuery(options: Omit<Urql.UseQueryArgs<ReceiptsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ReceiptsQuery>({ query: ReceiptsDocument, ...options });
+};
+export const TotalReceiptDocument = gql`
+    query TotalReceipt {
+  totalReceipt
+}
+    `;
+
+export function useTotalReceiptQuery(options: Omit<Urql.UseQueryArgs<TotalReceiptQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<TotalReceiptQuery>({ query: TotalReceiptDocument, ...options });
 };
 export const CreateUserDocument = gql`
     mutation CreateUser($data: CreateUserInput!, $image: Upload!) {

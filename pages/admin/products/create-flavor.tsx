@@ -2,7 +2,6 @@ import { Box, Button, Grid, InputLabel, makeStyles } from "@material-ui/core";
 import { blue, grey } from "@material-ui/core/colors";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
-
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { AvatarCard } from "../../../components/form/avatar-card";

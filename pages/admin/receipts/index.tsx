@@ -10,17 +10,14 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import Pagination from "@material-ui/lab/Pagination";
 
 import { blue, grey } from "@material-ui/core/colors";
 import React, { useState, useEffect, useCallback } from "react";
 import { SectionTitle } from "../../../components/typography/section-title";
 import { Page } from "../../../components/page";
-import { IReceipt } from "../../../interfaces/receipt";
-
-import { IUser } from "../../../interfaces/user";
 import { ReceiptItem } from "../../../components/admin/receipts/receipt-item";
-import { getEndpoint } from "../../../utils/getEndpoint";
+import { useReceiptsQuery } from "../../../generated/apolloComponent";
+import { Paginate } from "../../../components/admin/receipts/paginate";
 
 const useStyles = makeStyles({
   img: {
@@ -93,36 +90,20 @@ const useStyles = makeStyles({
 const ReceiptsPage: React.FC = () => {
   const classes = useStyles();
 
-  const [receipts, setReceipts] = useState<(IUser & IReceipt)[]>([]);
-
-  const [count, setCount] = useState<number>(0);
-
   const [page, setPage] = useState<number>(1);
 
-  const loadReceipts = useCallback(() => {
-    axios.get<(IUser & IReceipt)[]>(getEndpoint(`/api/receipt/all?page=${page}`)).then((response) => {
-      setReceipts(response.data);
-    });
-  }, [page]);
+  const [result] = useReceiptsQuery({
+    variables: {
+      take: 10,
+      skip: (page - 1) * 10,
+    },
+  });
 
-  const loadCount = useCallback(() => {
-    axios.get<{ count: number }>(getEndpoint(`/api/receipt/count`)).then((response) => {
-      setCount(response.data.count);
-    });
-  }, []);
+  const { data, fetching } = result;
 
   function handlePageChange(_: any, page: number) {
-    console.log(page);
     setPage(page);
   }
-
-  useEffect(() => {
-    loadCount();
-  }, [loadCount]);
-
-  useEffect(() => {
-    loadReceipts();
-  }, [page]);
 
   return (
     <Page title={"売上管理"}>
@@ -156,15 +137,21 @@ const ReceiptsPage: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {receipts.map((r) => (
-                    <ReceiptItem key={r.receiptid} {...r} />
-                  ))}
+                  {data?.receipts &&
+                    data?.receipts.map((r) => (
+                      <ReceiptItem
+                        key={r.id}
+                        created={r.created}
+                        id={r.id}
+                        cash={r.cash}
+                        total={r.total}
+                        user={r.user as any}
+                      />
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
-            <Box width={1} display="flex" justifyContent="center" mt={4}>
-              <Pagination page={page} onChange={handlePageChange} count={Math.floor(count / 10)} color="primary" />
-            </Box>
+            <Paginate page={page} handlePageChange={handlePageChange} />
           </Grid>
         </Box>
       </Grid>
