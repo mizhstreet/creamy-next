@@ -27,6 +27,7 @@ export type Query = {
   receipts?: Maybe<Array<Receipt>>;
   users?: Maybe<Array<User>>;
   totalReceipt?: Maybe<Scalars['Int']>;
+  me: Auth;
 };
 
 
@@ -135,6 +136,15 @@ export type ReceiptItem = {
 
 export type WhereUniqueInput = {
   id: Scalars['String'];
+};
+
+export type Auth = {
+  __typename?: 'Auth';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  image: Scalars['String'];
+  isLoggedIn: Scalars['Boolean'];
+  isAdmin: Scalars['Boolean'];
 };
 
 export type Mutation = {
@@ -536,6 +546,17 @@ export type LoginMutation = (
   ) }
 );
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me: (
+    { __typename?: 'Auth' }
+    & Pick<Auth, 'id' | 'isLoggedIn' | 'name' | 'image' | 'isAdmin'>
+  ) }
+);
+
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -797,6 +818,21 @@ export const LoginDocument = gql`
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const MeDocument = gql`
+    query Me {
+  me {
+    id
+    isLoggedIn
+    name
+    image
+    isAdmin
+  }
+}
+    `;
+
+export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const UsersDocument = gql`
     query Users {

@@ -1,10 +1,9 @@
-import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { grey, pink, red } from "@material-ui/core/colors";
+import { Box, Grid } from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
 import React from "react";
 import { ProductList } from "../components/home/product-list";
 import { FlavorList } from "../components/home/flavor-list";
 import { OptionList } from "../components/home/option-list";
-import { Order } from "../components/home/order";
 import { Page } from "../components/page";
 import { SectionTitle } from "../components/typography/section-title";
 import { SizeList } from "../components/home/size-list";

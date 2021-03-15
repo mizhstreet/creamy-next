@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -13,13 +13,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme, Theme, createStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { Box, Divider } from "@material-ui/core";
+import { Box, CircularProgress, Divider } from "@material-ui/core";
 import { blue, red } from "@material-ui/core/colors";
 import Head from "next/head";
-import { getEndpoint } from "../utils/getEndpoint";
 import { getImage } from "../utils/getImage";
-
-// import logo from "../../../public/images/logo.png";
+import useUser from "../lib/useUser";
 
 const drawerWidth = 120;
 
@@ -51,8 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     icon: {
       fontSize: 30,
-      // marginBottom: 10,
-      // color: red[500],
     },
     logo: {
       width: "70%",
@@ -105,8 +101,12 @@ interface Props {
 export const Page: React.FC<Props> = (props) => {
   const { window, children, title } = props;
   const classes = useStyles();
+
   const theme = useTheme();
+
   const router = useRouter();
+
+  const { user, fetching } = useUser({ shouldExecute: true });
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -191,14 +191,17 @@ export const Page: React.FC<Props> = (props) => {
 
         <Box height={"100%"}></Box>
         <Divider />
-        <ListItem className={classes.navListItem} button>
-          <Box width={1} display="flex" pt={2} flexDirection="column" alignItems="center">
-            <Box maxWidth={60} borderRadius={50} overflow={"hidden"}>
-              <img className={classes.avatar} src={""} alt="" />
+        {fetching && <CircularProgress />}
+        {user && (
+          <ListItem className={classes.navListItem} button>
+            <Box width={1} display="flex" pt={2} flexDirection="column" alignItems="center">
+              <Box maxWidth={60} borderRadius={50} overflow={"hidden"}>
+                <img className={classes.avatar} src={getImage(user.image)} alt="" />
+              </Box>
+              <Typography className={classes.navItemText}>{user.name}</Typography>
             </Box>
-            <Typography className={classes.navItemText}>MInh Biu</Typography>
-          </Box>
-        </ListItem>
+          </ListItem>
+        )}
         <ListItem className={classes.navListItem} button>
           <Box width={1} display="flex" pt={2} pb={2} flexDirection="column" alignItems="center" onClick={logout}>
             <ExitToAppTwoToneIcon style={{ color: red[800] }} className={classes.icon} />

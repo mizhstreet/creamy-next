@@ -36,9 +36,6 @@ const client = createClient({
   fetchOptions: () => {
     return {
       credentials: "include",
-      headers: {
-        cookie: `qid=s%3ATBZxprx82YnlApfF74gf1x-_9xqFHIE-.nGoqrarzk5%2FZZy5GxrzioL5RrpFzP6XdEqOn9lY8Hgg`,
-      },
     };
   },
 });

@@ -20,7 +20,7 @@ const Paginate: React.FC<IProps> = ({ page, handlePageChange }) => {
   if (error) {
     console.warn(error);
   }
-  console.log(data);
+
   return (
     <Box width={1} display="flex" justifyContent="center" mt={4}>
       <Pagination
