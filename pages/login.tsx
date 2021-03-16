@@ -110,7 +110,7 @@ const Login: React.FC = () => {
                 router.replace("/");
               }
               if (error) {
-                console.warn(error);
+                setErrMsg(error.message);
               }
             }}
           >

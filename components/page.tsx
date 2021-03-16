@@ -17,7 +17,8 @@ import { Box, CircularProgress, Divider } from "@material-ui/core";
 import { blue, red } from "@material-ui/core/colors";
 import Head from "next/head";
 import { getImage } from "../utils/getImage";
-import useUser from "../lib/useUser";
+import { useUser } from "../lib/useUser";
+import { useLogoutMutation } from "../generated/apolloComponent";
 
 const drawerWidth = 120;
 
@@ -108,15 +109,13 @@ export const Page: React.FC<Props> = (props) => {
 
   const { user, fetching } = useUser({ shouldExecute: true });
 
+  const [{ fetching: loading }, logout] = useLogoutMutation();
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  function logout() {
-    router.replace("/login");
-  }
 
   const drawer = (
     <div>
@@ -203,7 +202,27 @@ export const Page: React.FC<Props> = (props) => {
           </ListItem>
         )}
         <ListItem className={classes.navListItem} button>
-          <Box width={1} display="flex" pt={2} pb={2} flexDirection="column" alignItems="center" onClick={logout}>
+          <Box
+            width={1}
+            display="flex"
+            pt={2}
+            pb={2}
+            flexDirection="column"
+            alignItems="center"
+            onClick={async () => {
+              // if (loading) {
+              //   return;
+              // }
+              const { data, error } = await logout();
+              if (error) {
+                console.log(error);
+              }
+              console.log(data);
+              if (data?.logout) {
+                router.replace("/login");
+              }
+            }}
+          >
             <ExitToAppTwoToneIcon style={{ color: red[800] }} className={classes.icon} />
             <Typography style={{ color: red[800] }} className={classes.navItemText}>
               ログアウト

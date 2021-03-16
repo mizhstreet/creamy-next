@@ -31,8 +31,8 @@ const createUrqlClient = (ctx?: GetServerSidePropsContext) => {
 };
 
 const client = createClient({
-  url:
-    process.env.NODE_ENV === "production" ? "https://creamyy.mrmbiuzz.link/graphql" : "http://localhost:4001/graphql",
+  // url: "https://creamyy.mrmbiuzz.link/graphql",
+  url: "http://localhost:4001/graphql",
   exchanges: [dedupExchange, cacheExchange, ssrCache, multipartFetchExchange],
   fetchOptions: () => {
     return {

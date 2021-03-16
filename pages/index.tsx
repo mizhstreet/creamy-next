@@ -17,6 +17,7 @@ import { productsQuery } from "../graphql/product/queries/products";
 import { FlavorsQuery, OptionsQuery, ProductsQuery } from "../generated/apolloComponent";
 import { optionsQuery } from "../graphql/option/queries/options";
 import { flavorsQuery } from "../graphql/flavor/queries/flavors";
+import withAuth from "../components/hocs/with-auth";
 
 const Home: React.FC = () => {
   return (
@@ -54,6 +55,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       urqlState: ssrCache.extractData(),
     },
+    revalidate: 10,
   };
 };
-export default Home;
+export default withAuth(Home);
