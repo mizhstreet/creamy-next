@@ -7,7 +7,6 @@ import { OutlinedTextfield } from "../components/form/outlined-textfield";
 
 import { useRouter } from "next/router";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { getEndpoint } from "../utils/getEndpoint";
 import { useLoginMutation } from "../generated/apolloComponent";
 
 interface IValues {

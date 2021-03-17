@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { AvatarCard } from "../../../components/form/avatar-card";
 import { OutlinedTextfield } from "../../../components/form/outlined-textfield";
+import withAuth from "../../../components/hocs/with-auth";
 import { Loading } from "../../../components/loading";
 import { Page } from "../../../components/page";
 import { SnackAlert } from "../../../components/snack-alert";
@@ -145,4 +146,4 @@ const CreateUserPage: React.FC = () => {
   );
 };
 
-export default CreateUserPage;
+export default withAuth(CreateUserPage);

@@ -22,6 +22,7 @@ import { Page } from "../../../components/page";
 import { User } from "../../../components/admin/user/user";
 import { useUsersQuery } from "../../../generated/apolloComponent";
 import { getImage } from "../../../utils/getImage";
+import withAuth from "../../../components/hocs/with-auth";
 
 const useStyles = makeStyles({
   img: {
@@ -170,4 +171,4 @@ const UsersPage: React.FC = () => {
   );
 };
 
-export default UsersPage;
+export default withAuth(UsersPage);

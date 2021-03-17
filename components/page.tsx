@@ -107,7 +107,7 @@ export const Page: React.FC<Props> = (props) => {
 
   const router = useRouter();
 
-  const { user, fetching } = useUser({ shouldExecute: true });
+  const { user } = useUser({ shouldExecute: true });
 
   const [{ fetching: loading }, logout] = useLogoutMutation();
 
@@ -190,7 +190,7 @@ export const Page: React.FC<Props> = (props) => {
 
         <Box height={"100%"}></Box>
         <Divider />
-        {fetching && <CircularProgress />}
+        {(!user || user.isLoggedIn === false) && <CircularProgress />}
         {user && (
           <ListItem className={classes.navListItem} button>
             <Box width={1} display="flex" pt={2} flexDirection="column" alignItems="center">

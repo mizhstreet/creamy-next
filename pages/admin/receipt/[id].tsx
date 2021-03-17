@@ -1,13 +1,12 @@
 import { Box, CircularProgress, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
+import withAuth from "../../../components/hocs/with-auth";
 import { Page } from "../../../components/page";
 import { ReceiptItem } from "../../../components/receipt/receipt-item";
-import { ReceiptQuery, ReceiptQueryVariables, useReceiptQuery } from "../../../generated/apolloComponent";
-import { receiptQuery } from "../../../graphql/receipt/queries/receipt";
-import { client, ssrCache } from "../../../lib/urqlClient";
+import { useReceiptQuery } from "../../../generated/apolloComponent";
 import { parseDate } from "../../../utils/parseDate";
 
 const useStyles = makeStyles({
@@ -121,19 +120,4 @@ const ReceiptPage: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  await client
-    .query<ReceiptQuery, ReceiptQueryVariables>(receiptQuery, {
-      where: {
-        id: params?.id as any,
-      },
-    })
-    .toPromise();
-  return {
-    props: {
-      urqlState: ssrCache.extractData(),
-    },
-  };
-};
-
-export default ReceiptPage;
+export default withAuth(ReceiptPage);

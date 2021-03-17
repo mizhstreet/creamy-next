@@ -14,6 +14,7 @@ import { SnackAlert } from "../../../components/snack-alert";
 import { useRouter } from "next/router";
 import { AvatarCard } from "../../../components/form/avatar-card";
 import { useCreateProductMutation } from "../../../generated/apolloComponent";
+import withAuth from "../../../components/hocs/with-auth";
 
 const useStyles = makeStyles({
   applyBtn: {
@@ -229,4 +230,4 @@ const CreateProductPage: React.FC = () => {
   );
 };
 
-export default CreateProductPage;
+export default withAuth(CreateProductPage);

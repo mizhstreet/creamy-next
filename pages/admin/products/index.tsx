@@ -8,6 +8,7 @@ import { Page } from "../../../components/page";
 import { ProductList } from "../../../components/admin/products/product-list";
 import { OptionList } from "../../../components/admin/products/option-list";
 import { FlavorList } from "../../../components/admin/products/flavor-list";
+import withAuth from "../../../components/hocs/with-auth";
 
 const useStyles = makeStyles({
   icon: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-const UsersPage: React.FC = () => {
+const ProductsPage: React.FC = () => {
   const classes = useStyles();
   return (
     <Page title={"商品管理"}>
@@ -91,4 +92,4 @@ const UsersPage: React.FC = () => {
   );
 };
 
-export default UsersPage;
+export default withAuth(ProductsPage);

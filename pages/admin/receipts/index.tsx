@@ -18,6 +18,7 @@ import { ReceiptItem } from "../../../components/admin/receipts/receipt-item";
 import { useReceiptsQuery } from "../../../generated/apolloComponent";
 import { Paginate } from "../../../components/admin/receipts/paginate";
 import { Loading } from "../../../components/loading";
+import withAuth from "../../../components/hocs/with-auth";
 
 const useStyles = makeStyles({
   icon: {
@@ -101,4 +102,4 @@ const ReceiptsPage: React.FC = () => {
   );
 };
 
-export default ReceiptsPage;
+export default withAuth(ReceiptsPage);

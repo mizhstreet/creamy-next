@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { AvatarCard } from "../../../components/form/avatar-card";
 import { OutlinedTextfield } from "../../../components/form/outlined-textfield";
+import withAuth from "../../../components/hocs/with-auth";
 import { Loading } from "../../../components/loading";
 import { Page } from "../../../components/page";
 import { SnackAlert } from "../../../components/snack-alert";
@@ -51,7 +52,7 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
   stockPrice: Yup.number().required("必ず入力してください"),
 });
 
-const CreateOptionPage: React.FC = () => {
+const CreateFlavorPage: React.FC = () => {
   const classes = useStyles();
 
   const router = useRouter();
@@ -133,4 +134,4 @@ const CreateOptionPage: React.FC = () => {
   );
 };
 
-export default CreateOptionPage;
+export default withAuth(CreateFlavorPage);

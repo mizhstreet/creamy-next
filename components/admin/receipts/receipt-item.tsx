@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { Receipt, User } from "../../../generated/apolloComponent";
 import { getImage } from "../../../utils/getImage";
+import { parseDate } from "../../../utils/parseDate";
 
 const useStyles = makeStyles({
   img: {
@@ -54,7 +55,7 @@ const ReceiptItem: React.FC<
           <Typography className={classes.name}>{user ? user.name : ""}</Typography>
         </Box>
       </TableCell>
-      <TableCell className={classes.tableCell}>{created}</TableCell>
+      <TableCell className={classes.tableCell}>{parseDate(created)}</TableCell>
       <TableCell className={classes.tableCell}>{total}円</TableCell>
 
       <TableCell className={classes.tableCell}>
