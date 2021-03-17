@@ -6,8 +6,8 @@ const isServerSide = typeof window === "undefined";
 const ssrCache = ssrExchange({ isClient: !isServerSide });
 
 const client = createClient({
-  // url: "https://creamyy.mrmbiuzz.link/graphql",
-  url: "http://localhost:4001/graphql",
+  url:
+    process.env.NODE_ENV === "production" ? "https://creamyy.mrmbiuzz.link/graphql" : "http://localhost:4001/graphql",
   exchanges: [dedupExchange, cacheExchange, ssrCache, multipartFetchExchange],
   fetchOptions: () => {
     return {
